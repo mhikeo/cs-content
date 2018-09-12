@@ -443,7 +443,7 @@ flow:
         do:
           strings.string_equals:
             - first_string: '${test_parameters}'
-            - second_string: null
+            - second_string: ''
             - ignore_case: 'true'
         publish: []
         navigate:
