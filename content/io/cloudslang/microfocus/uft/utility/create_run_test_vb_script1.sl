@@ -213,7 +213,7 @@ imports:
   math: io.cloudslang.base.math
 
 flow:
-  name: create_run_test_vb_script
+  name: create_run_test_vb_script1
   inputs:
     - host
     - port:
@@ -228,7 +228,8 @@ flow:
     - is_test_visible: 'True'
     - test_path
     - test_results_path
-    - test_parameters
+    - test_parameters:
+        required: false
     - uft_workspace_path
     -  auth_type:
         default: 'basic'
@@ -274,39 +275,6 @@ flow:
         navigate:
           - SUCCESS: add_test_results_path
           - FAILURE: on_failure
-    - create_vb_script:
-        do:
-          ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
-            - password:
-                value: '${password}'
-                sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
-            - proxy_password:
-                value: '${trust_password}'
-                sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
-            - trust_password:
-                value: '${trust_password}'
-                sensitive: true
-            - operation_timeout: '${operation_timeout}'
-            - script: "${'Set-Content -Path \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs\" -Value \"'+ script +'\" -Encoding ASCII'}"
-        publish:
-          - exception
-          - return_code
-          - stderr
-          - script_exit_code
-        navigate:
-          - SUCCESS: SUCCESS
-          - FAILURE: on_failure
     - add_test_results_path:
         do:
           strings.search_and_replace:
@@ -322,7 +290,7 @@ flow:
         loop:
           for: parameter in test_parameters
           do:
-            strings.append:
+            io.cloudslang.base.strings.append:
               - origin_string: "${get('text', '')}"
               - text: "${'qtParams.Item(`\"' + parameter.split(\":\")[0] + '`\").Value = `\"' + parameter.split(\":\")[1] +'`\"`r`n'}"
           break: []
@@ -330,6 +298,17 @@ flow:
             - text: '${new_string}'
         navigate:
           - SUCCESS: add_parameters
+    - is_test_visible:
+        do:
+          strings.search_and_replace:
+            - origin_string: '${script}'
+            - text_to_replace: '<visible_param>'
+            - replace_with: '${is_test_visible}'
+        publish:
+          - script: '${replaced_string}'
+        navigate:
+          - SUCCESS: string_equals_1
+          - FAILURE: on_failure
     - add_parameters:
         do:
           strings.search_and_replace:
@@ -340,17 +319,6 @@ flow:
           - script: '${replaced_string}'
         navigate:
           - SUCCESS: create_folder_structure
-          - FAILURE: on_failure
-    - is_test_visible:
-        do:
-          strings.search_and_replace:
-            - origin_string: '${script}'
-            - text_to_replace: '<visible_param>'
-            - replace_with: '${is_test_visible}'
-        publish:
-          - script: '${replaced_string}'
-        navigate:
-          - SUCCESS: add_parameter
           - FAILURE: on_failure
     - create_folder_structure:
         do:
@@ -438,6 +406,56 @@ flow:
         navigate:
           - SUCCESS: check_if_filename_exists
           - FAILURE: on_failure
+    - create_vb_script:
+        do:
+          ps.powershell_script:
+            - host: '${host}'
+            - port: '${port}'
+            - protocol: '${protocol}'
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+            - auth_type: '${auth_type}'
+            - proxy_host: '${proxy_host}'
+            - proxy_port: '${proxy_port}'
+            - proxy_username: '${proxy_username}'
+            - proxy_password:
+                value: '${proxy_password}'
+                sensitive: true
+            - trust_all_roots: '${trust_all_roots}'
+            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
+            - trust_keystore: '${trust_keystore}'
+            - trust_password:
+                value: '${trust_password}'
+                sensitive: true
+            - operation_timeout: '${operation_timeout}'
+            - script: "${'Set-Content -Path \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs\" -Value \"'+ script +'\" -Encoding ASCII'}"
+        publish:
+          - exception
+          - return_code
+          - stderr
+          - script_exit_code
+        navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: on_failure
+    - string_equals_1:
+        do:
+          strings.string_equals:
+            - first_string: '${test_parameters}'
+            - second_string: null
+            - ignore_case: 'true'
+        publish: []
+        navigate:
+          - SUCCESS: add_parameter
+          - FAILURE: append
+    - append:
+        do:
+          io.cloudslang.base.strings.append:
+            - origin_string: '${text}'
+            - text: null
+        navigate:
+          - SUCCESS: add_parameters
 
   outputs:
     - script_name: "${uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs'}"
@@ -451,45 +469,3 @@ flow:
     - FAILURE
     - SUCCESS
 
-extensions:
-  graph:
-    steps:
-      add_test_results_path:
-        x: 92
-        y: 357
-      create_folder_structure:
-        x: 660
-        y: 364
-      add_parameters:
-        x: 666
-        y: 139
-      is_test_visible:
-        x: 366
-        y: 353
-      check_if_filename_exists:
-        x: 974
-        y: 365
-      add_parameter:
-        x: 358
-        y: 143
-      add_numbers:
-        x: 1307
-        y: 368
-      string_equals:
-        x: 1001
-        y: 147
-      add_test_path:
-        x: 100
-        y: 150
-      create_vb_script:
-        x: 1305
-        y: 157
-        navigate:
-          83c47325-2a49-d09d-2896-f1352a114a41:
-            targetId: fbdddb13-1c72-ade3-566f-e341dcbd36c7
-            port: SUCCESS
-    results:
-      SUCCESS:
-        fbdddb13-1c72-ade3-566f-e341dcbd36c7:
-          x: 1625
-          y: 149
