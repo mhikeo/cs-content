@@ -444,7 +444,7 @@ flow:
           strings.string_equals:
             - first_string: '${test_parameters}'
             - second_string: ''
-            - ignore_case: 'false'
+            - ignore_case: 'true'
         publish: []
         navigate:
           - SUCCESS: add_parameter
@@ -453,7 +453,7 @@ flow:
         do:
           io.cloudslang.base.strings.append:
             - origin_string: '${text}'
-            - text: '/n'
+            - text: ''
         navigate:
           - SUCCESS: add_parameters
 
