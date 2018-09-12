@@ -295,7 +295,7 @@ flow:
           publish:
             - text: '${new_string}'
         navigate:
-          - SUCCESS: add_parameters
+          - SUCCESS: create_folder_structure
     - is_test_visible:
         do:
           strings.search_and_replace:
@@ -305,18 +305,7 @@ flow:
         publish:
           - script: '${replaced_string}'
         navigate:
-          - SUCCESS: string_equals_1
-          - FAILURE: on_failure
-    - add_parameters:
-        do:
-          strings.search_and_replace:
-            - origin_string: '${script}'
-            - text_to_replace: '<params>'
-            - replace_with: '${text}'
-        publish:
-          - script: '${replaced_string}'
-        navigate:
-          - SUCCESS: create_folder_structure
+          - SUCCESS: add_parameter
           - FAILURE: on_failure
     - create_folder_structure:
         do:
@@ -437,23 +426,6 @@ flow:
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
-    - string_equals_1:
-        do:
-          strings.string_equals:
-            - first_string: '${test_parameters}'
-            - second_string: ''
-            - ignore_case: 'true'
-        publish: []
-        navigate:
-          - SUCCESS: add_parameter
-          - FAILURE: append
-    - append:
-        do:
-          io.cloudslang.base.strings.append:
-            - origin_string: '${text}'
-            - text: ''
-        navigate:
-          - SUCCESS: add_parameters
 
   outputs:
     - script_name: "${uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs'}"
