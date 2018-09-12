@@ -228,7 +228,8 @@ flow:
     - is_test_visible: 'True'
     - test_path
     - test_results_path
-    - test_parameters
+    - test_parameters:
+        required: false
     - uft_workspace_path
     -  auth_type:
         default: 'basic'
