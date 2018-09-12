@@ -444,7 +444,7 @@ flow:
           strings.string_equals:
             - first_string: '${test_parameters}'
             - second_string: ''
-            - ignore_case: 'true'
+            - ignore_case: 'false'
         publish: []
         navigate:
           - SUCCESS: add_parameter
