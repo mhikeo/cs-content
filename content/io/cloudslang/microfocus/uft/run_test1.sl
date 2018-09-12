@@ -267,7 +267,7 @@ flow:
             strings.string_equals:
               - first_string: '${test_parameters}'
               - second_string: ''
-              - ignore_case: 'true'
+              - ignore_case: 'false'
           navigate:
             - SUCCESS: create_trigger_robot_vb_script
             - FAILURE: create_trigger_robot_vb_script_1
