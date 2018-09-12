@@ -13,8 +13,8 @@
 #
 ########################################################################################################################
 #!!
-#! @description: This flow triggers an UFT Scenario.
-#!               The UFT Scenario needs to exist before this flow is ran.
+#! @description: This flow creates a VB script needed to run an UFT Scenario based on a
+#!               default triggering template.
 #!
 #!  Notes:
 #!  1. This operations uses the Windows Remote Management (WinRM) implementation for WS-Management standard to execute
@@ -129,18 +129,19 @@
 #!
 #! @input host: The host where UFT scenarios are located.
 #! @input port: The WinRM port of the provided host.
-#!                    Default: https: '5986' http: '5985'
+#!              Default for https: '5986'
+#!              Default for http: '5985'
 #! @input protocol: The WinRM protocol.
 #! @input username: The username for the WinRM connection.
 #! @input password: The password for the WinRM connection.
-#! @input is_test_visible: Parameter to set if the UFT actions should be visible in the UI or not.
-#!                          Valid: 'True' or 'False'
-#!                          Default value: 'True'
+#! @input is_test_visible: Parameter to set if the UFT scenario actions should be visible in the UI or not.
 #! @input test_path: The path to the UFT scenario.
 #! @input test_results_path: The path where the UFT scenario will save its results.
-#! @input test_parameters: parameters from the UFT scenario. A list of name:value pairs separated by comma.
+#! @input test_parameters: UFT scenario parameters from the UFT scenario. A list of name:value pairs separated by comma.
 #!                          Eg. name1:value1,name2:value2
 #! @input uft_workspace_path: The path where the OO will create needed scripts for UFT scenario execution.
+#! @input script: The run UFT scenario VB script template.
+#! @input fileNumber: Used for development purposes
 #! @input auth_type:Type of authentication used to execute the request on the target server
 #!                  Valid: 'basic', digest', 'ntlm', 'kerberos', 'anonymous' (no authentication).
 #!                    Default: 'basic'
@@ -192,29 +193,27 @@
 #!                           response or a fault within the specified time.
 #!                           Default: '60'
 #!
+#! @output script_name: Full path VB script
 #! @output exception: Exception if there was an error when executing, empty otherwise.
 #! @output return_code: '0' if success, '-1' otherwise.
-#! @output stderr: The standard error output if any error occurred.
+#! @output stderr: An error message in case there was an error while running power shell
 #! @output script_exit_code: '0' if success, '-1' otherwise.
-#! @output script_name: name of the script.
+#! @output fileExists: file exist.
 #!
 #! @result SUCCESS: The operation executed successfully.
 #! @result FAILURE: The operation could not be executed.
-#!
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.microfocus.uft
+namespace: io.cloudslang.microfocus.uft.utility
 
 imports:
-  ps: io.cloudslang.base.powershell
-  st: io.cloudslang.strings
-  utility: io.cloudslang.microfocus.uft.utility
   strings: io.cloudslang.base.strings
-
+  ps: io.cloudslang.base.powershell
+  math: io.cloudslang.base.math
 
 flow:
-  name: run_test1
+  name: create_run_test_vb_script2
   inputs:
     - host
     - port:
@@ -226,13 +225,10 @@ flow:
     - password:
         required: false
         sensitive: true
-    - is_test_visible
+    - is_test_visible: 'True'
     - test_path
     - test_results_path
-    - test_parameters1:
-        required: false
-    - test_parameters:
-        default: ${get('test_parameters1', '')}
+    - test_parameters
     - uft_workspace_path
     -  auth_type:
         default: 'basic'
@@ -245,7 +241,6 @@ flow:
         required: false
     - proxy_password:
         required: false
-        sensitive: true
     - trust_all_roots:
         default: 'false'
         required: false
@@ -262,31 +257,24 @@ flow:
     - operation_timeout:
         default: '60'
         required: false
+    - script: "${get_sp('run_robot_script_template')}"
+    - fileNumber:
+        default: '0'
+        private: true
 
   workflow:
-    - create_trigger_robot_vb_script:
+    - add_test_path:
         do:
-          utility.create_run_test_vb_script2:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
-            - password: '${password}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
-            - proxy_password: '${proxy_password}'
-            - is_test_visible: '${is_test_visible}'
-            - test_path: '${test_path}'
-            - test_results_path: '${test_results_path}'
-            - test_parameters: '${test_parameters}'
-            - uft_workspace_path: '${uft_workspace_path}'
+          strings.search_and_replace:
+            - origin_string: '${script}'
+            - text_to_replace: '<test_path>'
+            - replace_with: '${test_path}'
         publish:
-          - script_name
+          - script: '${replaced_string}'
         navigate:
+          - SUCCESS: add_test_results_path
           - FAILURE: on_failure
-          - SUCCESS: trigger_vb_script
-    - trigger_vb_script:
+    - create_vb_script:
         do:
           ps.powershell_script:
             - host: '${host}'
@@ -301,7 +289,7 @@ flow:
             - proxy_port: '${proxy_port}'
             - proxy_username: '${proxy_username}'
             - proxy_password:
-                value: '${proxy_password}'
+                value: '${trust_password}'
                 sensitive: true
             - trust_all_roots: '${trust_all_roots}'
             - x_509_hostname_verifier: '${x_509_hostname_verifier}'
@@ -310,41 +298,7 @@ flow:
                 value: '${trust_password}'
                 sensitive: true
             - operation_timeout: '${operation_timeout}'
-            - script: "${'invoke-expression \"cmd /C cscript ' + script_name + '\"'}"
-        publish:
-          - exception
-          - return_code
-          - stderr
-          - script_exit_code
-
-        navigate:
-          - SUCCESS: string_equals
-          - FAILURE: delete_vb_script_1
-    - delete_vb_script:
-        do:
-          ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
-            - password:
-                value: '${password}'
-                sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
-            - proxy_password:
-                value: '${proxy_password}'
-                sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
-            - trust_password:
-                value: '${trust_password}'
-                sensitive: true
-            - operation_timeout: '${operation_timeout}'
-            - script: "${'Remove-Item \"' + script_name +'\"'}"
+            - script: "${'Set-Content -Path \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs\" -Value \"'+ script +'\" -Encoding ASCII'}"
         publish:
           - exception
           - return_code
@@ -352,8 +306,53 @@ flow:
           - script_exit_code
         navigate:
           - SUCCESS: SUCCESS
-          - FAILURE: SUCCESS
-    - delete_vb_script_1:
+          - FAILURE: on_failure
+    - add_test_results_path:
+        do:
+          strings.search_and_replace:
+            - origin_string: '${script}'
+            - text_to_replace: '<test_results_path>'
+            - replace_with: '${test_results_path}'
+        publish:
+          - script: '${replaced_string}'
+        navigate:
+          - SUCCESS: is_test_visible
+          - FAILURE: on_failure
+    - add_parameter:
+        loop:
+          for: parameter in test_parameters
+          do:
+            strings.append:
+              - origin_string: "${get('text', '')}"
+              - text: "${'qtParams.Item(`\"' + parameter.split(\":\")[0] + '`\").Value = `\"' + parameter.split(\":\")[1] +'`\"`r`n'}"
+          break: []
+          publish:
+            - text: '${new_string}'
+        navigate:
+          - SUCCESS: add_parameters
+    - add_parameters:
+        do:
+          strings.search_and_replace:
+            - origin_string: '${script}'
+            - text_to_replace: '<params>'
+            - replace_with: '${text}'
+        publish:
+          - script: '${replaced_string}'
+        navigate:
+          - SUCCESS: create_folder_structure
+          - FAILURE: on_failure
+    - is_test_visible:
+        do:
+          strings.search_and_replace:
+            - origin_string: '${script}'
+            - text_to_replace: '<visible_param>'
+            - replace_with: '${is_test_visible}'
+        publish:
+          - script: '${replaced_string}'
+        navigate:
+          - SUCCESS: add_parameter
+          - FAILURE: on_failure
+    - create_folder_structure:
         do:
           ps.powershell_script:
             - host: '${host}'
@@ -377,30 +376,76 @@ flow:
                 value: '${trust_password}'
                 sensitive: true
             - operation_timeout: '${operation_timeout}'
-            - script: "${'Remove-Item \"' + script_name + '\"'}"
+            - script: "${'New-item \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + '\" -ItemType Directory -force'}"
         publish:
           - exception
           - return_code
           - stderr
           - script_exit_code
+          - scriptName: output_0
         navigate:
-          - SUCCESS: FAILURE
+          - SUCCESS: check_if_filename_exists
+          - FAILURE: on_failure
+    - check_if_filename_exists:
+        do:
+          ps.powershell_script:
+            - host: '${host}'
+            - port: '${port}'
+            - protocol: '${protocol}'
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+            - auth_type: '${auth_type}'
+            - proxy_host: '${proxy_host}'
+            - proxy_port: '${proxy_port}'
+            - proxy_username: '${proxy_username}'
+            - proxy_password:
+                value: '${proxy_password}'
+                sensitive: true
+            - trust_all_roots: '${trust_all_roots}'
+            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
+            - trust_keystore: '${trust_keystore}'
+            - trust_password:
+                value: '${trust_password}'
+                sensitive: true
+            - operation_timeout: '${operation_timeout}'
+            - script: "${'Test-Path \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber +  '.vbs\"'}"
+        publish:
+          - exception
+          - return_code
+          - stderr
+          - script_exit_code
+          - fileExists: '${return_result}'
+        navigate:
+          - SUCCESS: string_equals
           - FAILURE: on_failure
     - string_equals:
-            do:
-              strings.string_equals:
-                - first_string: '${script_exit_code}'
-                - second_string: '0'
-                - ignore_case: 'true'
-            navigate:
-              - SUCCESS: delete_vb_script
-              - FAILURE: delete_vb_script_1
+        do:
+          strings.string_equals:
+            - first_string: '${fileExists}'
+            - second_string: 'True'
+        navigate:
+          - SUCCESS: add_numbers
+          - FAILURE: create_vb_script
+    - add_numbers:
+        do:
+          math.add_numbers:
+            - value1: '${fileNumber}'
+            - value2: '1'
+        publish:
+          - fileNumber: '${result}'
+        navigate:
+          - SUCCESS: check_if_filename_exists
+          - FAILURE: on_failure
+
   outputs:
+    - script_name: "${uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs'}"
     - exception: ${get('exception', '')}
     - return_code: ${get('return_code', '')}
     - stderr: ${get('stderr', '')}
     - script_exit_code: ${get('script_exit_code', '')}
-    - script_name: ${get('script_name', '')}
+    - fileExists: ${get('fileExists', '')}
 
   results:
     - FAILURE
@@ -409,43 +454,42 @@ flow:
 extensions:
   graph:
     steps:
-      create_trigger_robot_vb_script:
-        x: 20
-        y: 99
-      trigger_vb_script:
-        x: 181
-        y: 98
-      delete_vb_script:
-        x: 656
-        y: 94
-        navigate:
-          9601df64-de18-5c4f-cbb6-49285c2ddf7c:
-            targetId: efaa8ccd-7bc1-b44f-9445-c2adc2a23a31
-            port: SUCCESS
-            vertices:
-              - x: 766.6607369295532
-                y: 102.76036936598254
-              - x: 847
-                y: 113
-          df284b8a-571a-ded7-1b3c-e34d15eb2d76:
-            targetId: efaa8ccd-7bc1-b44f-9445-c2adc2a23a31
-            port: FAILURE
-      delete_vb_script_1:
-        x: 658
-        y: 261
-        navigate:
-          bccc7aeb-f02b-bf14-8d9c-ab09d2c0fe6f:
-            targetId: 3c909de7-63a5-468a-8e37-ade3d8c05b25
-            port: SUCCESS
+      add_test_results_path:
+        x: 92
+        y: 357
+      create_folder_structure:
+        x: 660
+        y: 364
+      add_parameters:
+        x: 666
+        y: 139
+      is_test_visible:
+        x: 366
+        y: 353
+      check_if_filename_exists:
+        x: 974
+        y: 365
+      add_parameter:
+        x: 358
+        y: 143
+      add_numbers:
+        x: 1307
+        y: 368
       string_equals:
-        x: 444
-        y: 78
+        x: 1001
+        y: 147
+      add_test_path:
+        x: 100
+        y: 150
+      create_vb_script:
+        x: 1305
+        y: 157
+        navigate:
+          83c47325-2a49-d09d-2896-f1352a114a41:
+            targetId: fbdddb13-1c72-ade3-566f-e341dcbd36c7
+            port: SUCCESS
     results:
       SUCCESS:
-        efaa8ccd-7bc1-b44f-9445-c2adc2a23a31:
-          x: 942
-          y: 96
-      FAILURE:
-        3c909de7-63a5-468a-8e37-ade3d8c05b25:
-          x: 940
-          y: 266
+        fbdddb13-1c72-ade3-566f-e341dcbd36c7:
+          x: 1625
+          y: 149
