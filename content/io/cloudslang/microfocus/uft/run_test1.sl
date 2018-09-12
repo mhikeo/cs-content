@@ -233,6 +233,7 @@ flow:
         required: false
     - test_parameters:
         default: ${get('test_parameters1', '')}
+        private: true
     - uft_workspace_path
     -  auth_type:
         default: 'basic'
