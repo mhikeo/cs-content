@@ -284,18 +284,6 @@ flow:
         navigate:
           - SUCCESS: is_test_visible
           - FAILURE: on_failure
-    - add_parameter:
-        loop:
-          for: parameter in test_parameters
-          do:
-            io.cloudslang.base.strings.append:
-              - origin_string: "${get('text', '')}"
-              - text: "${'qtParams.Item(`\"' + parameter.split(\":\")[0] + '`\").Value = `\"' + parameter.split(\":\")[1] +'`\"`r`n'}"
-          break: []
-          publish:
-            - text: '${new_string}'
-        navigate:
-          - SUCCESS: create_folder_structure
     - is_test_visible:
         do:
           strings.search_and_replace:
@@ -305,7 +293,7 @@ flow:
         publish:
           - script: '${replaced_string}'
         navigate:
-          - SUCCESS: add_parameter
+          - SUCCESS: create_folder_structure
           - FAILURE: on_failure
     - create_folder_structure:
         do:
