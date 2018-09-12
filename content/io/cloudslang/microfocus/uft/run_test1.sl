@@ -230,6 +230,8 @@ flow:
     - test_path
     - test_results_path
     - uft_workspace_path
+    - test_parameters:
+            required: false
     -  auth_type:
         default: 'basic'
         required: false
