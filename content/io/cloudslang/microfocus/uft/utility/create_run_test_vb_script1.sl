@@ -453,7 +453,7 @@ flow:
         do:
           io.cloudslang.base.strings.append:
             - origin_string: '${text}'
-            - text: ''
+            - text: '/n'
         navigate:
           - SUCCESS: add_parameters
 
