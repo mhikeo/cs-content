@@ -228,8 +228,6 @@ flow:
     - is_test_visible: 'True'
     - test_path
     - test_results_path
-    - test_parameters:
-        required: false
     - uft_workspace_path
     -  auth_type:
         default: 'basic'
@@ -258,7 +256,7 @@ flow:
     - operation_timeout:
         default: '60'
         required: false
-    - script: "${get_sp('run_robot_script_template')}"
+    - script: "${get_sp('run_robot_script_template1')}"
     - fileNumber:
         default: '0'
         private: true
