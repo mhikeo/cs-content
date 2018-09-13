@@ -269,8 +269,8 @@ flow:
               - second_string: ''
               - ignore_case: 'false'
           navigate:
-            - SUCCESS: create_trigger_robot_vb_script
-            - FAILURE: create_trigger_robot_vb_script_1
+            - SUCCESS: create_trigger_robot_vb_script_1
+            - FAILURE: create_trigger_robot_vb_script
       - create_trigger_robot_vb_script:
           do:
             utility.create_run_test_vb_script1:
