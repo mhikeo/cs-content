@@ -282,6 +282,7 @@ flow:
         publish:
           - exception
           - return_code
+          - return_result
           - stderr
           - script_exit_code
           - script_name
@@ -317,6 +318,7 @@ flow:
           - exception
           - return_code
           - stderr
+          - return_result
           - script_exit_code
 
         navigate:
@@ -351,6 +353,7 @@ flow:
           - exception
           - return_code
           - stderr
+          - return_result
           - script_exit_code
         navigate:
           - SUCCESS: SUCCESS
@@ -384,6 +387,7 @@ flow:
           - exception
           - return_code
           - stderr
+          - return_result
           - script_exit_code
         navigate:
           - SUCCESS: FAILURE
@@ -398,12 +402,12 @@ flow:
               - SUCCESS: delete_vb_script
               - FAILURE: delete_vb_script_1
   outputs:
-    - exception
-    - return_code
-    - stderr
-    - script_exit_code
-    - script_name
-
+    - exception: ${get('exception', '')}
+    - return_code: ${get('return_code', '')}
+    - stderr: ${get('stderr', '')}
+    - script_exit_code: ${get('script_exit_code', '')}
+    - script_name: ${get('script_name', '')}
+    - return_result: ${get('return_result', '')}
   results:
     - FAILURE
     - SUCCESS
