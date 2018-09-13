@@ -280,6 +280,10 @@ flow:
             - test_parameters: '${test_parameters}'
             - uft_workspace_path: '${uft_workspace_path}'
         publish:
+          - exception
+          - return_code
+          - stderr
+          - script_exit_code
           - script_name
         navigate:
           - FAILURE: on_failure
