@@ -213,7 +213,7 @@ imports:
   math: io.cloudslang.base.math
 
 flow:
-  name: create_run_test_vb_script1
+  name: create_run_test_vb_script_no_params
   inputs:
     - host
     - port:
@@ -256,7 +256,7 @@ flow:
     - operation_timeout:
         default: '60'
         required: false
-    - script: "${get_sp('run_robot_script_template1')}"
+    - script: "${get_sp('run_robot_script_template_no_params')}"
     - fileNumber:
         default: '0'
         private: true
