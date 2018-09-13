@@ -475,11 +475,11 @@ flow:
             - SUCCESS: delete_vb_script
             - FAILURE: delete_vb_script_1
   outputs:
-    - exception: ${get('exception', '')}
-    - return_code: ${get('return_code', '')}
-    - stderr: ${get('stderr', '')}
-    - script_exit_code: ${get('script_exit_code', '')}
-    - script_name: ${get('script_name', '')}
+    - exception
+    - return_code
+    - stderr
+    - script_exit_code
+    - script_name
 
   results:
     - FAILURE

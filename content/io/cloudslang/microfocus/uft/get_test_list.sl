@@ -389,12 +389,12 @@ flow:
 
   outputs:
     - tests: '${tests_list.rstrip(",")}'
-    - exception: ${get('exception', '')}
-    - return_code: ${get('return_code', '')}
-    - stderr: ${get('stderr', '')}
-    - script_exit_code: ${get('script_exit_code', '')}
-    - folders: ${get('folders', '')}
-    - test_file_exists: ${get('test_file_exists', '')}
+    - exception
+    - return_code
+    - stderr
+    - script_exit_code
+    - folders
+    - test_file_exists
 
   results:
     - SUCCESS

@@ -265,6 +265,10 @@ flow:
             - uft_workspace_path: '${uft_workspace_path}'
         publish:
           - script_name
+          - exception
+          - return_code
+          - stderr
+          - script_exit_code
         navigate:
           - FAILURE: on_failure
           - SUCCESS: trigger_vb_script
@@ -379,10 +383,10 @@ flow:
               - FAILURE: delete_vb_script_1
   outputs:
     - parameters: '${parameters}'
-    - exception: ${get('exception', '')}
-    - return_code: ${get('return_code', '')}
-    - stderr: ${get('stderr', '')}
-    - script_exit_code: ${get('script_exit_code', '')}
+    - exception
+    - return_code
+    - stderr
+    - script_exit_code
     - script_name: ${get('script_name', '')}
 
   results:
