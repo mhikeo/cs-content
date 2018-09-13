@@ -290,6 +290,10 @@ flow:
               - uft_workspace_path: '${uft_workspace_path}'
           publish:
             - script_name
+            - exception
+            - return_code
+            - stderr
+            - script_exit_code
           navigate:
             - FAILURE: on_failure
             - SUCCESS: trigger_vb_script
@@ -319,6 +323,7 @@ flow:
               - operation_timeout: '${operation_timeout}'
               - script: "${'invoke-expression \"cmd /C cscript ' + script_name + '\"'}"
           publish:
+            - script_name
             - exception
             - return_code
             - stderr
@@ -361,6 +366,7 @@ flow:
               - operation_timeout: '${operation_timeout}'
               - script: "${'Remove-Item \"' + script_name +'\"'}"
           publish:
+            - script_name
             - exception
             - return_code
             - stderr
@@ -393,6 +399,7 @@ flow:
               - operation_timeout: '${operation_timeout}'
               - script: "${'Remove-Item \"' + script_name + '\"'}"
           publish:
+            - script_name
             - exception
             - return_code
             - stderr
@@ -419,6 +426,10 @@ flow:
               - uft_workspace_path: '${uft_workspace_path}'
           publish:
             - script_name
+            - exception
+            - return_code
+            - stderr
+            - script_exit_code
           navigate:
             - FAILURE: on_failure
             - SUCCESS: trigger_vb_script_1
