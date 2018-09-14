@@ -326,7 +326,7 @@ flow:
               - operation_timeout
               - script: "${'invoke-expression \"cmd /C cscript ' + script_name + '\"'}"
           publish:
-            - script_name
+
             - exception
             - return_code
             - return_result
