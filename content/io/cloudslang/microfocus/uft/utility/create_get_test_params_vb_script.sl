@@ -292,6 +292,8 @@ flow:
             - script: "${'Set-Content -Path \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] +  '_get_params_' + fileNumber + '.vbs \" -Value \"'+ script +'\" -Encoding ASCII'}"
         publish:
           - exception
+          - return_code
+          - return_result
           - stderr
           - script_exit_code
         navigate:
@@ -325,6 +327,7 @@ flow:
         publish:
           - exception
           - return_code
+          - return_result
           - stderr
           - script_exit_code
         navigate:
@@ -358,6 +361,7 @@ flow:
         publish:
           - exception
           - return_code
+          - return_result
           - stderr
           - script_exit_code
           - fileExists: '${return_result}'
@@ -385,7 +389,11 @@ flow:
 
   outputs:
     - script_name: "${uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] +  '_get_params_' + fileNumber + '.vbs'}"
-
+    - exception
+    - return_code
+    - return_result
+    - stderr
+    - script_exit_code
   results:
     - FAILURE
     - SUCCESS

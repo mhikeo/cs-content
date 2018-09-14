@@ -283,6 +283,7 @@ flow:
           - return_code
           - stderr
           - script_exit_code
+          - return_result
           - folders: "${return_result.replace('\\n',',')}"
         navigate:
           - SUCCESS: length
@@ -323,6 +324,7 @@ flow:
         publish:
           - exception
           - return_code
+          - return_result
           - stderr
           - script_exit_code
           - test_file_exists: "${return_result.replace('\\n',',')}"
@@ -395,6 +397,7 @@ flow:
     - script_exit_code
     - folders
     - test_file_exists
+    - return_result
 
   results:
     - SUCCESS

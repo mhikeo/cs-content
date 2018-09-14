@@ -269,6 +269,7 @@ flow:
           - return_code
           - stderr
           - script_exit_code
+          - return_result
         navigate:
           - FAILURE: on_failure
           - SUCCESS: trigger_vb_script
@@ -301,6 +302,7 @@ flow:
           - exception
           - return_code
           - stderr
+          - return_result
           - script_exit_code
           - parameters: "${return_result.replace('::',':<no_value>:')}"
         navigate:
@@ -335,6 +337,7 @@ flow:
           - exception
           - return_code
           - stderr
+          - return_result
           - script_exit_code
         navigate:
           - SUCCESS: SUCCESS
@@ -368,6 +371,7 @@ flow:
           - exception
           - return_code
           - stderr
+          - return_result
           - script_exit_code
         navigate:
           - SUCCESS: FAILURE
@@ -385,6 +389,7 @@ flow:
     - parameters: '${parameters}'
     - exception
     - return_code
+    - return_result
     - stderr
     - script_exit_code
     - script_name: ${get('script_name', '')}

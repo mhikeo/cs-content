@@ -265,59 +265,61 @@ flow:
     - create_trigger_robot_vb_script:
         do:
           utility.create_run_test_vb_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
-            - password: '${password}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
-            - proxy_password: '${proxy_password}'
-            - is_test_visible: '${is_test_visible}'
-            - test_path: '${test_path}'
-            - test_results_path: '${test_results_path}'
-            - test_parameters: '${test_parameters}'
-            - uft_workspace_path: '${uft_workspace_path}'
+            - host
+            - port
+            - protocol
+            - username
+            - password
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - is_test_visible
+            - test_path
+            - test_results_path
+            - test_parameters
+            - uft_workspace_path
         publish:
           - exception
           - return_code
           - stderr
           - script_exit_code
           - script_name
+          - return_result
         navigate:
           - FAILURE: on_failure
           - SUCCESS: trigger_vb_script
     - trigger_vb_script:
         do:
           ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
+            - host
+            - port
+            - protocol
+            - username
             - password:
                 value: '${password}'
                 sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
+            - auth_type
+            - proxy_host
+            - proxy_port
+            - proxy_username
             - proxy_password:
                 value: '${proxy_password}'
                 sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
+            - trust_all_roots
+            - x_509_hostname_verifier
+            - trust_keystore
             - trust_password:
                 value: '${trust_password}'
                 sensitive: true
-            - operation_timeout: '${operation_timeout}'
+            - operation_timeout
             - script: "${'invoke-expression \"cmd /C cscript ' + script_name + '\"'}"
         publish:
           - exception
           - return_code
           - stderr
           - script_exit_code
+          - return_result
 
         navigate:
           - SUCCESS: string_equals
@@ -325,66 +327,68 @@ flow:
     - delete_vb_script:
         do:
           ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
+            - host
+            - port
+            - protocol
+            - username
             - password:
                 value: '${password}'
                 sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
+            - auth_type
+            - proxy_host
+            - proxy_port
+            - proxy_username
             - proxy_password:
                 value: '${proxy_password}'
                 sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
+            - trust_all_roots
+            - x_509_hostname_verifier
+            - trust_keystore
             - trust_password:
                 value: '${trust_password}'
                 sensitive: true
-            - operation_timeout: '${operation_timeout}'
+            - operation_timeout
             - script: "${'Remove-Item \"' + script_name +'\"'}"
         publish:
           - exception
           - return_code
           - stderr
           - script_exit_code
+          - return_result
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: SUCCESS
     - delete_vb_script_1:
         do:
           ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
+            - host
+            - port
+            - protocol
+            - username
             - password:
                 value: '${password}'
                 sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
+            - auth_type
+            - proxy_host
+            - proxy_port
+            - proxy_username
             - proxy_password:
                 value: '${proxy_password}'
                 sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
+            - trust_all_roots
+            - x_509_hostname_verifier
+            - trust_keystore
             - trust_password:
                 value: '${trust_password}'
                 sensitive: true
-            - operation_timeout: '${operation_timeout}'
+            - operation_timeout
             - script: "${'Remove-Item \"' + script_name + '\"'}"
         publish:
           - exception
           - return_code
           - stderr
           - script_exit_code
+          - return_result
         navigate:
           - SUCCESS: FAILURE
           - FAILURE: on_failure
@@ -403,6 +407,7 @@ flow:
     - stderr
     - script_exit_code
     - script_name
+    - return_result
 
   results:
     - FAILURE

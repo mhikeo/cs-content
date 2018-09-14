@@ -302,8 +302,9 @@ flow:
         publish:
           - exception
           - return_code
-          - stderr
+          - return_result
           - script_exit_code
+          - stderr
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
@@ -380,8 +381,9 @@ flow:
         publish:
           - exception
           - return_code
-          - stderr
+          - return_result
           - script_exit_code
+          - stderr
           - scriptName: output_0
         navigate:
           - SUCCESS: check_if_filename_exists
@@ -414,8 +416,9 @@ flow:
         publish:
           - exception
           - return_code
-          - stderr
+          - return_result
           - script_exit_code
+          - stderr
           - fileExists: '${return_result}'
         navigate:
           - SUCCESS: string_equals
@@ -441,11 +444,12 @@ flow:
 
   outputs:
     - script_name: "${uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs'}"
-    - exception: ${get('exception', '')}
-    - return_code: ${get('return_code', '')}
-    - stderr: ${get('stderr', '')}
-    - script_exit_code: ${get('script_exit_code', '')}
-    - fileExists: ${get('fileExists', '')}
+    - exception
+    - return_code
+    - stderr
+    - return_result
+    - script_exit_code
+    - fileExists
 
   results:
     - FAILURE
