@@ -276,20 +276,20 @@ flow:
       - create_trigger_robot_vb_script:
           do:
             utility.create_run_test_vb_script1:
-              - host: '${host}'
-              - port: '${port}'
-              - protocol: '${protocol}'
-              - username: '${username}'
+              - host
+              - port
+              - protocol
+              - username
               - password: '${password}'
-              - proxy_host: '${proxy_host}'
-              - proxy_port: '${proxy_port}'
-              - proxy_username: '${proxy_username}'
+              - proxy_host
+              - proxy_port
+              - proxy_username
               - proxy_password: '${proxy_password}'
-              - is_test_visible: '${is_test_visible}'
-              - test_path: '${test_path}'
-              - test_results_path: '${test_results_path}'
-              - test_parameters: '${test_parameters}'
-              - uft_workspace_path: '${uft_workspace_path}'
+              - is_test_visible
+              - test_path
+              - test_results_path
+              - test_parameters
+              - uft_workspace_path
           publish:
             - script_name
             - exception
@@ -303,27 +303,27 @@ flow:
       - trigger_vb_script:
           do:
             ps.powershell_script:
-              - host: '${host}'
-              - port: '${port}'
-              - protocol: '${protocol}'
-              - username: '${username}'
+              - host
+              - port
+              - protocol
+              - username
               - password:
                   value: '${password}'
                   sensitive: true
-              - auth_type: '${auth_type}'
-              - proxy_host: '${proxy_host}'
-              - proxy_port: '${proxy_port}'
-              - proxy_username: '${proxy_username}'
+              - auth_type
+              - proxy_host
+              - proxy_port
+              - proxy_username
               - proxy_password:
                   value: '${proxy_password}'
                   sensitive: true
-              - trust_all_roots: '${trust_all_roots}'
-              - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-              - trust_keystore: '${trust_keystore}'
+              - trust_all_roots
+              - x_509_hostname_verifier
+              - trust_keystore
               - trust_password:
                   value: 'changeit'
                   sensitive: true
-              - operation_timeout: '${operation_timeout}'
+              - operation_timeout
               - script: "${'invoke-expression \"cmd /C cscript ' + script_name + '\"'}"
           publish:
             - script_name
@@ -347,27 +347,27 @@ flow:
       - delete_vb_script:
           do:
             ps.powershell_script:
-              - host: '${host}'
-              - port: '${port}'
-              - protocol: '${protocol}'
-              - username: '${username}'
+              - host
+              - port
+              - protocol
+              - username
               - password:
                   value: '${password}'
                   sensitive: true
-              - auth_type: '${auth_type}'
-              - proxy_host: '${proxy_host}'
-              - proxy_port: '${proxy_port}'
-              - proxy_username: '${proxy_username}'
+              - auth_type
+              - proxy_host
+              - proxy_port
+              - proxy_username
               - proxy_password:
                   value: '${proxy_password}'
                   sensitive: true
-              - trust_all_roots: '${trust_all_roots}'
-              - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-              - trust_keystore: '${trust_keystore}'
+              - trust_all_roots
+              - x_509_hostname_verifier
+              - trust_keystore
               - trust_password:
                   value: 'changeit'
                   sensitive: true
-              - operation_timeout: '${operation_timeout}'
+              - operation_timeout
               - script: "${'Remove-Item \"' + script_name +'\"'}"
           publish:
             - script_name
@@ -382,26 +382,26 @@ flow:
       - delete_vb_script_1:
           do:
             ps.powershell_script:
-              - host: '${host}'
-              - port: '${port}'
-              - protocol: '${protocol}'
-              - username: '${username}'
+              - host
+              - port
+              - protocol
+              - username
               - password:
                   value: '${password}'
                   sensitive: true
-              - auth_type: '${auth_type}'
-              - proxy_host: '${proxy_host}'
-              - proxy_port: '${proxy_port}'
-              - proxy_username: '${proxy_username}'
+              - auth_type
+              - proxy_host
+              - proxy_port
+              - proxy_username
               - proxy_password:
                   value: '${proxy_password}'
                   sensitive: true
-              - trust_all_roots: '${trust_all_roots}'
-              - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-              - trust_keystore: '${trust_keystore}'
+              - trust_all_roots
+              - x_509_hostname_verifier
+              - trust_keystore
               - trust_password:
                   value: 'changeit'
-              - operation_timeout: '${operation_timeout}'
+              - operation_timeout
               - script: "${'Remove-Item \"' + script_name + '\"'}"
           publish:
             - script_name
@@ -416,20 +416,20 @@ flow:
       - create_trigger_robot_vb_script_1:
           do:
             utility.create_run_test_vb_script1:
-              - host: '${host}'
-              - port: '${port}'
-              - protocol: '${protocol}'
-              - username: '${username}'
+              - host
+              - port
+              - protocol
+              - username
               - password: '${password}'
-              - proxy_host: '${proxy_host}'
-              - proxy_port: '${proxy_port}'
-              - proxy_username: '${proxy_username}'
+              - proxy_host
+              - proxy_port
+              - proxy_username
               - proxy_password: '${proxy_password}'
-              - is_test_visible: '${is_test_visible}'
-              - test_path: '${test_path}'
-              - test_results_path: '${test_results_path}'
-              - test_parameters: '${test_parameters}'
-              - uft_workspace_path: '${uft_workspace_path}'
+              - is_test_visible
+              - test_path
+              - test_results_path
+              - test_parameters
+              - uft_workspace_path
           publish:
             - script_name
             - exception
@@ -443,26 +443,26 @@ flow:
       - trigger_vb_script_1:
           do:
             ps.powershell_script:
-              - host: '${host}'
-              - port: '${port}'
-              - protocol: '${protocol}'
-              - username: '${username}'
+              - host
+              - port
+              - protocol
+              - username
               - password:
                   value: '${password}'
                   sensitive: true
-              - auth_type: '${auth_type}'
-              - proxy_host: '${proxy_host}'
-              - proxy_port: '${proxy_port}'
-              - proxy_username: '${proxy_username}'
+              - auth_type
+              - proxy_host
+              - proxy_port
+              - proxy_username
               - proxy_password:
                   value: '${proxy_password}'
                   sensitive: true
-              - trust_all_roots: '${trust_all_roots}'
-              - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-              - trust_keystore: '${trust_keystore}'
+              - trust_all_roots
+              - x_509_hostname_verifier
+              - trust_keystore
               - trust_password:
                   value: 'changeit'
-              - operation_timeout: '${operation_timeout}'
+              - operation_timeout
               - script: "${'invoke-expression \"cmd /C cscript ' + script_name + '\"'}"
           publish:
             - exception

@@ -257,27 +257,27 @@ flow:
     - get_folders:
         do:
           ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
+            - host
+            - port
+            - protocol
+            - username
             - password:
                 value: '${password}'
                 sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
+            - auth_type
+            - proxy_host
+            - proxy_port
+            - proxy_username
             - proxy_password:
                 value: '${proxy_password}'
                 sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
+            - trust_all_roots
+            - x_509_hostname_verifier
+            - trust_keystore
             - trust_password:
                 value: '${trust_password}'
                 sensitive: true
-            - operation_timeout: '${operation_timeout}'
+            - operation_timeout
             - script: "${'(Get-ChildItem -Path \"'+ test_path +'\" -Directory).Name -join \",\"'}"
         publish:
           - exception
@@ -300,27 +300,27 @@ flow:
     - test_file_exists:
         do:
           ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
+            - host
+            - port
+            - protocol
+            - username
             - password:
                 value: '${password}'
                 sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
+            - auth_type
+            - proxy_host
+            - proxy_port
+            - proxy_username
             - proxy_password:
                 value: '${proxy_password}'
                 sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
+            - trust_all_roots
+            - x_509_hostname_verifier
+            - trust_keystore
             - trust_password:
                 value: '${trust_password}'
                 sensitive: true
-            - operation_timeout: '${operation_timeout}'
+            - operation_timeout
             - script: "${'Test-Path \"' + test_path.rstrip(\\\\) + \"\\\\\" + folder_to_check + '\\\\Test.tsp\"'}"
         publish:
           - exception

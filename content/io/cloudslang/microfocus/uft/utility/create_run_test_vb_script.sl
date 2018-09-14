@@ -279,27 +279,27 @@ flow:
     - create_vb_script:
         do:
           ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
+            - host
+            - port
+            - protocol
+            - username
             - password:
                 value: '${password}'
                 sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
+            - auth_type
+            - proxy_host
+            - proxy_port
+            - proxy_username
             - proxy_password:
                 value: '${trust_password}'
                 sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
+            - trust_all_roots
+            - x_509_hostname_verifier
+            - trust_keystore
             - trust_password:
                 value: '${trust_password}'
                 sensitive: true
-            - operation_timeout: '${operation_timeout}'
+            - operation_timeout
             - script: "${'Set-Content -Path \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs\" -Value \"'+ script +'\" -Encoding ASCII'}"
         publish:
           - exception
@@ -358,27 +358,27 @@ flow:
     - create_folder_structure:
         do:
           ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
+            - host
+            - port
+            - protocol
+            - username
             - password:
                 value: '${password}'
                 sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
+            - auth_type
+            - proxy_host
+            - proxy_port
+            - proxy_username
             - proxy_password:
                 value: '${proxy_password}'
                 sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
+            - trust_all_roots
+            - x_509_hostname_verifier
+            - trust_keystore
             - trust_password:
                 value: '${trust_password}'
                 sensitive: true
-            - operation_timeout: '${operation_timeout}'
+            - operation_timeout
             - script: "${'New-item \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + '\" -ItemType Directory -force'}"
         publish:
           - exception
@@ -393,27 +393,27 @@ flow:
     - check_if_filename_exists:
         do:
           ps.powershell_script:
-            - host: '${host}'
-            - port: '${port}'
-            - protocol: '${protocol}'
-            - username: '${username}'
+            - host
+            - port
+            - protocol
+            - username
             - password:
                 value: '${password}'
                 sensitive: true
-            - auth_type: '${auth_type}'
-            - proxy_host: '${proxy_host}'
-            - proxy_port: '${proxy_port}'
-            - proxy_username: '${proxy_username}'
+            - auth_type
+            - proxy_host
+            - proxy_port
+            - proxy_username
             - proxy_password:
                 value: '${proxy_password}'
                 sensitive: true
-            - trust_all_roots: '${trust_all_roots}'
-            - x_509_hostname_verifier: '${x_509_hostname_verifier}'
-            - trust_keystore: '${trust_keystore}'
+            - trust_all_roots
+            - x_509_hostname_verifier
+            - trust_keystore
             - trust_password:
                 value: '${trust_password}'
                 sensitive: true
-            - operation_timeout: '${operation_timeout}'
+            - operation_timeout
             - script: "${'Test-Path \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber +  '.vbs\"'}"
         publish:
           - exception
