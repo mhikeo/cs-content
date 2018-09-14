@@ -288,7 +288,7 @@ flow:
           - folders: "${return_result.replace('\\n',',')}"
         navigate:
           - SUCCESS: length
-          - FAILURE: on_failure
+          - FAILURE: FAILURE
     - string_equals:
         do:
           strings.string_equals:
