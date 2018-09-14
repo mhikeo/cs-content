@@ -387,7 +387,7 @@ flow:
               - SUCCESS: delete_vb_script
               - FAILURE: delete_vb_script_1
   outputs:
-    - parameters: '${parameters}'
+    - parameters
     - exception
     - return_code
     - return_result
