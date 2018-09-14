@@ -376,6 +376,7 @@ flow:
             - index: '${iterator}'
         publish:
           - folder_to_check: '${return_result}'
+          - tests_list
         navigate:
           - SUCCESS: test_file_exists
           - FAILURE: on_failure
@@ -399,6 +400,7 @@ flow:
     - folders
     - test_file_exists
     - return_result
+    - tests_list
 
   results:
     - SUCCESS
