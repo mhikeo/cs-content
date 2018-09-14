@@ -294,6 +294,7 @@ flow:
             - script_name
             - exception
             - return_code
+            - return_result
             - stderr
             - script_exit_code
           navigate:
@@ -328,6 +329,7 @@ flow:
             - script_name
             - exception
             - return_code
+            - return_result
             - stderr
             - script_exit_code
           navigate:
@@ -371,6 +373,7 @@ flow:
             - script_name
             - exception
             - return_code
+            - return_result
             - stderr
             - script_exit_code
           navigate:
@@ -404,6 +407,7 @@ flow:
             - script_name
             - exception
             - return_code
+            - return_result
             - stderr
             - script_exit_code
           navigate:
@@ -430,6 +434,7 @@ flow:
             - script_name
             - exception
             - return_code
+            - return_result
             - stderr
             - script_exit_code
           navigate:
@@ -462,6 +467,7 @@ flow:
           publish:
             - exception
             - return_code
+            - return_result
             - stderr
             - script_exit_code
           navigate:
@@ -480,6 +486,7 @@ flow:
     - exception
     - return_code
     - stderr
+    - return_result
     - script_exit_code
     - script_name
 

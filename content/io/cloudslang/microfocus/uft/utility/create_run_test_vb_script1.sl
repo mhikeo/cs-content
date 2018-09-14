@@ -212,6 +212,7 @@ imports:
   strings: io.cloudslang.base.strings
   ps: io.cloudslang.base.powershell
   math: io.cloudslang.base.math
+  prop: io.cloudslang.microfocus.uft
 
 flow:
   name: create_run_test_vb_script1
@@ -257,7 +258,7 @@ flow:
     - operation_timeout:
         default: '60'
         required: false
-    - script: "${get_sp('run_robot_script_template1')}"
+    - script: ${get_sp('io.cloudslang.microfocus.uft.run_robot_script_template_no_params')}
     - fileNumber:
         default: '0'
         private: true
@@ -324,6 +325,7 @@ flow:
         publish:
           - exception
           - return_code
+          - return_result
           - stderr
           - script_exit_code
           - scriptName: output_0
@@ -358,6 +360,7 @@ flow:
         publish:
           - exception
           - return_code
+          - return_result
           - stderr
           - script_exit_code
           - fileExists: '${return_result}'
@@ -411,6 +414,7 @@ flow:
           - exception
           - return_code
           - stderr
+          - return_result
           - script_exit_code
         navigate:
           - SUCCESS: SUCCESS
@@ -418,11 +422,12 @@ flow:
 
   outputs:
     - script_name: "${uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs'}"
-    - exception: ${get('exception', '')}
-    - return_code: ${get('return_code', '')}
-    - stderr: ${get('stderr', '')}
-    - script_exit_code: ${get('script_exit_code', '')}
-    - fileExists: ${get('fileExists', '')}
+    - exception
+    - return_code
+    - return_result
+    - stderr
+    - script_exit_code
+    - fileExists
 
   results:
     - FAILURE
