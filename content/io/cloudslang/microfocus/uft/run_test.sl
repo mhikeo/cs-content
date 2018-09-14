@@ -340,7 +340,7 @@ flow:
             strings.string_equals:
               - first_string: '${script_exit_code}'
               - second_string: '0'
-              - ignore_case: 'true'
+              - ignore_case: 'false'
           navigate:
             - SUCCESS: delete_vb_script
             - FAILURE: delete_vb_script_1
