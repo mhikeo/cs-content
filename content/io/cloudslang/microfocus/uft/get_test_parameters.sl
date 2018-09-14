@@ -190,6 +190,7 @@
 #! @output exception: Exception if there was an error when executing, empty otherwise.
 #! @output return_code: '0' if success, '-1' otherwise.
 #! @output stderr: An error message in case there was an error while running power shell
+#! @output return_result: The scripts result.
 #! @output script_exit_code: '0' if success, '-1' otherwise.
 #! @output script_name: name of the script.
 #!

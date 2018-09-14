@@ -188,6 +188,7 @@
 #! @output tests: UFT scenario list from the specified path.
 #! @output exception: Exception if there was an error when executing, empty otherwise.
 #! @output return_code: '0' if success, '-1' otherwise.
+#! @output return_result: The scripts result.
 #! @output stderr: An error message in case there was an error while running power shell
 #! @output script_exit_code: '0' if success, '-1' otherwise.
 #! @output folders: folders from the specified path.
@@ -402,7 +403,6 @@ flow:
   results:
     - SUCCESS
     - FAILURE
-
 extensions:
   graph:
     steps:

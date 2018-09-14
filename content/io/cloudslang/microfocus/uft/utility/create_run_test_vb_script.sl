@@ -196,6 +196,7 @@
 #! @output script_name: Full path VB script
 #! @output exception: Exception if there was an error when executing, empty otherwise.
 #! @output return_code: '0' if success, '-1' otherwise.
+#! @output return_result: The scripts result.
 #! @output stderr: An error message in case there was an error while running power shell
 #! @output script_exit_code: '0' if success, '-1' otherwise.
 #! @output fileExists: file exist.
@@ -211,6 +212,7 @@ imports:
   strings: io.cloudslang.base.strings
   ps: io.cloudslang.base.powershell
   math: io.cloudslang.base.math
+  prop: io.cloudslang.microfocus.uft
 
 flow:
   name: create_run_test_vb_script
@@ -257,7 +259,7 @@ flow:
     - operation_timeout:
         default: '60'
         required: false
-    - script: "${get_sp('run_robot_script_template')}"
+    - script: ${get_sp('io.cloudslang.microfocus.uft.run_robot_script_template')}
     - fileNumber:
         default: '0'
         private: true

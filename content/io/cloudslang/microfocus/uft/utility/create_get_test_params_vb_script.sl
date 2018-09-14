@@ -189,6 +189,7 @@
 #!
 #! @output script_name: Full path for VB script.
 #! @output exception: Exception if there was an error when executing, empty otherwise.
+#! @output return_result: The scripts result.
 #! @output stderr: An error message in case there was an error while running power shell
 #! @output script_exit_code: '0' if success, '-1' otherwise.
 #!
@@ -204,6 +205,7 @@ imports:
   strings: io.cloudslang.base.strings
   ps: io.cloudslang.base.powershell
   math: io.cloudslang.base.math
+  prop: io.cloudslang.microfocus.uft
 
 flow:
   name: create_get_test_params_vb_script
@@ -247,7 +249,7 @@ flow:
     - operation_timeout:
         default: '60'
         required: false
-    - script: "${get_sp('get_robot_params_script_template')}"
+    - script: ${get_sp('io.cloudslang.microfocus.uft.get_robot_params_script_template')}
 
     - fileNumber:
         default: '0'

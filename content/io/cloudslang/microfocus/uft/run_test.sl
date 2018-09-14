@@ -139,6 +139,7 @@
 #! @input test_path: The path to the UFT scenario.
 #! @input test_results_path: The path where the UFT scenario will save its results.
 #! @input test_parameters: parameters from the UFT scenario. A list of name:value pairs separated by comma.
+#!                         The parameters are optional in case you are running a UFT scenario without parameters.
 #!                          Eg. name1:value1,name2:value2
 #! @input uft_workspace_path: The path where the OO will create needed scripts for UFT scenario execution.
 #! @input auth_type:Type of authentication used to execute the request on the target server
@@ -195,6 +196,7 @@
 #! @output exception: Exception if there was an error when executing, empty otherwise.
 #! @output return_code: '0' if success, '-1' otherwise.
 #! @output stderr: The standard error output if any error occurred.
+#! @output return_result: The scripts result.
 #! @output script_exit_code: '0' if success, '-1' otherwise.
 #! @output script_name: name of the script.
 #!
