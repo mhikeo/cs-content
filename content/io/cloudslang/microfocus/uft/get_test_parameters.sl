@@ -323,7 +323,7 @@ flow:
     - string_equals1:
             do:
               strings.string_equals:
-                - first_string: '${return_result}'
+                - first_string: '${parameters}'
                 - second_string: ''
                 - ignore_case: 'false'
             navigate:
