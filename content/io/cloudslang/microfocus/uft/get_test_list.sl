@@ -336,7 +336,7 @@ flow:
     - length:
         do:
           lists.length:
-            - list: "${get('folders', '')}"
+            - list: "${get('folders', 'Failure invalid folder')}"
         publish:
           - list_length: '${return_result}'
           - exception
