@@ -287,8 +287,18 @@ flow:
           - return_result
           - folders: "${return_result.replace('\\n',',')}"
         navigate:
-          - SUCCESS: length
+          - SUCCESS: string_equals_1
           - FAILURE: FAILURE
+
+    - string_equals_1:
+              do:
+                strings.string_equals:
+                  - first_string: '${folders}'
+                  - second_string: ''
+                  - ignore_case: 'false'
+              navigate:
+                - SUCCESS: length
+                - FAILURE: FAILURE
     - length:
         do:
           lists.length:
