@@ -289,15 +289,50 @@ flow:
         navigate:
           - SUCCESS: length
           - FAILURE: FAILURE
-
-    - string_equals:
+    - length:
+        do:
+          lists.length:
+            - list: "${get('folders', '')}"
+        publish:
+          - list_length: '${return_result}'
+          - exception
+          - return_result
+          - return_code
+        navigate:
+          - SUCCESS: is_done
+          - FAILURE: FAILURE
+    - is_done:
         do:
           strings.string_equals:
-            - first_string: '${test_file_exists}'
-            - second_string: 'True'
+            - first_string: '${iterator}'
+            - second_string: '${list_length}'
         navigate:
-          - SUCCESS: append
-          - FAILURE: add_numbers
+          - SUCCESS: default_if_empty
+          - FAILURE: get_by_index
+
+    - default_if_empty:
+        do:
+          utils.default_if_empty:
+            - initial_value: "${get('tests_list', '')}"
+            - default_value: No tests founded in the provided path.
+        publish:
+          - tests_list: '${return_result}'
+        navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: on_failure
+    - get_by_index:
+        do:
+          lists.get_by_index:
+            - list: '${folders}'
+            - delimiter: ','
+            - index: '${iterator}'
+        publish:
+          - folder_to_check: '${return_result}'
+          - tests_list
+        navigate:
+          - SUCCESS: test_file_exists
+          - FAILURE: on_failure
+
     - test_file_exists:
         do:
           ps.powershell_script:
@@ -333,36 +368,16 @@ flow:
         navigate:
           - SUCCESS: string_equals
           - FAILURE: on_failure
-    - length:
-        do:
-          lists.length:
-            - list: "${get('folders', 'Failure invalid folder')}"
-        publish:
-          - list_length: '${return_result}'
-          - exception
-          - return_result
-          - return_code
-        navigate:
-          - SUCCESS: is_done
-          - FAILURE: FAILURE
-    - is_done:
+
+    - string_equals:
         do:
           strings.string_equals:
-            - first_string: '${iterator}'
-            - second_string: '${list_length}'
+            - first_string: '${test_file_exists}'
+            - second_string: 'True'
         navigate:
-          - SUCCESS: default_if_empty
-          - FAILURE: get_by_index
-    - add_numbers:
-        do:
-          math.add_numbers:
-            - value1: '${iterator}'
-            - value2: '1'
-        publish:
-          - iterator: '${result}'
-        navigate:
-          - SUCCESS: is_done
-          - FAILURE: on_failure
+          - SUCCESS: append
+          - FAILURE: add_numbers
+
     - append:
         do:
           strings.append:
@@ -372,27 +387,16 @@ flow:
           - tests_list: '${new_string}'
         navigate:
           - SUCCESS: add_numbers
-    - get_by_index:
+
+    - add_numbers:
         do:
-          lists.get_by_index:
-            - list: '${folders}'
-            - delimiter: ','
-            - index: '${iterator}'
+          math.add_numbers:
+            - value1: '${iterator}'
+            - value2: '1'
         publish:
-          - folder_to_check: '${return_result}'
-          - tests_list
+          - iterator: '${result}'
         navigate:
-          - SUCCESS: test_file_exists
-          - FAILURE: on_failure
-    - default_if_empty:
-        do:
-          utils.default_if_empty:
-            - initial_value: "${get('tests_list', '')}"
-            - default_value: No tests founded in the provided path.
-        publish:
-          - tests_list: '${return_result}'
-        navigate:
-          - SUCCESS: SUCCESS
+          - SUCCESS: is_done
           - FAILURE: on_failure
 
   outputs:
