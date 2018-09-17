@@ -339,9 +339,12 @@ flow:
             - list: '${folders}'
         publish:
           - list_length: '${return_result}'
+          - exception
+          - return_result
+          - return_code
         navigate:
           - SUCCESS: is_done
-          - FAILURE: on_failure
+          - FAILURE: FAILURE
     - is_done:
         do:
           strings.string_equals:
