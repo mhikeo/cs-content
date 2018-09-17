@@ -292,9 +292,9 @@ flow:
     - string_equals1:
         do:
           strings.string_equals:
-            - first_string: '${return_result}'
-            - second_string: '-1'
-            - ignore_case: 'true'
+            - first_string: '${exception}'
+            - second_string: ''
+            - ignore_case: 'false'
         navigate:
           - SUCCESS: length
           - FAILURE: on_failure
