@@ -294,7 +294,7 @@ flow:
           strings.string_equals:
             - first_string: '${return_result}'
             - second_string: '-1'
-            - ignore_case: 'false'
+            - ignore_case: 'true'
         navigate:
           - SUCCESS: length
           - FAILURE: on_failure
