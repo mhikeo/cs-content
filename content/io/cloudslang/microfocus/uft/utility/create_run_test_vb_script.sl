@@ -382,10 +382,10 @@ flow:
             - script: "${'New-item \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + '\" -ItemType Directory -force'}"
         publish:
           - exception
-          - return_code
-          - return_result
-          - script_exit_code
           - stderr
+          - return_result
+          - return_code
+          - script_exit_code
           - scriptName: output_0
         navigate:
           - SUCCESS: check_if_filename_exists
@@ -417,10 +417,10 @@ flow:
             - script: "${'Test-Path \"' + uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber +  '.vbs\"'}"
         publish:
           - exception
-          - return_code
-          - return_result
-          - script_exit_code
           - stderr
+          - return_result
+          - return_code
+          - script_exit_code
           - fileExists: '${return_result}'
         navigate:
           - SUCCESS: string_equals
@@ -447,10 +447,11 @@ flow:
   outputs:
     - script_name: "${uft_workspace_path.rstrip(\"\\\\\") + \"\\\\\" + test_path.split(\"\\\\\")[-1] + '_' + fileNumber + '.vbs'}"
     - exception
-    - return_code
     - stderr
     - return_result
+    - return_code
     - script_exit_code
+
     - fileExists
 
   results:

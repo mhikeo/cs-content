@@ -430,12 +430,13 @@ flow:
               - test_parameters
               - uft_workspace_path
           publish:
-            - script_name
-            - exception
-            - return_code
-            - return_result
-            - stderr
-            - script_exit_code
+          - exception
+          - stderr
+          - return_result
+          - return_code
+          - script_exit_code
+          - script_name
+
           navigate:
             - FAILURE: on_failure
             - SUCCESS: trigger_vb_script_1
@@ -464,11 +465,12 @@ flow:
               - operation_timeout
               - script: "${'invoke-expression \"cmd /C cscript ' + script_name + '\"'}"
           publish:
-            - exception
-            - return_code
-            - return_result
-            - stderr
-            - script_exit_code
+          - exception
+          - stderr
+          - return_result
+          - return_code
+          - script_exit_code
+
           navigate:
             - SUCCESS: string_equals_2
             - FAILURE: delete_vb_script_1
@@ -483,9 +485,9 @@ flow:
             - FAILURE: delete_vb_script_1
   outputs:
     - exception
-    - return_code
     - stderr
     - return_result
+    - return_code
     - script_exit_code
     - script_name
 

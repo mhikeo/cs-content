@@ -281,10 +281,10 @@ flow:
             - script: "${'(Get-ChildItem -Path \"'+ test_path +'\" -Directory).Name -join \",\"'}"
         publish:
           - exception
-          - return_code
           - stderr
-          - script_exit_code
           - return_result
+          - return_code
+          - script_exit_code
           - folders: "${return_result.replace('\\n',',')}"
         navigate:
           - SUCCESS: string_equals_1
@@ -371,9 +371,9 @@ flow:
             - script: "${'Test-Path \"' + test_path.rstrip(\\\\) + \"\\\\\" + folder_to_check + '\\\\Test.tsp\"'}"
         publish:
           - exception
-          - return_code
-          - return_result
           - stderr
+          - return_result
+          - return_code
           - script_exit_code
           - test_file_exists: "${return_result.replace('\\n',',')}"
         navigate:
@@ -413,52 +413,11 @@ flow:
   outputs:
     - tests: ${get('tests_list.rstrip(",")', '')}
     - exception
-    - return_code
     - stderr
-    - script_exit_code
-    - folders
-    - test_file_exists
     - return_result
+    - return_code
+    - script_exit_code
 
   results:
     - SUCCESS
     - FAILURE
-extensions:
-  graph:
-    steps:
-      length:
-        x: 250
-        y: 77
-      default_if_empty:
-        x: 637
-        y: 80
-        navigate:
-          0579a2e1-65b5-64bc-6afb-87ae9d3dcfbb:
-            targetId: 023c90fc-05ed-adf3-eb3c-da02c1f4333a
-            port: SUCCESS
-      add_numbers:
-        x: 251
-        y: 256
-      string_equals:
-        x: 289
-        y: 416
-      test_file_exists:
-        x: 428
-        y: 422
-      get_by_index:
-        x: 424
-        y: 250
-      is_done:
-        x: 462
-        y: 62
-      append:
-        x: 80
-        y: 429
-      get_folders:
-        x: 53
-        y: 80
-    results:
-      SUCCESS:
-        023c90fc-05ed-adf3-eb3c-da02c1f4333a:
-          x: 849
-          y: 83

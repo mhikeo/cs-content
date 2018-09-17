@@ -326,8 +326,8 @@ flow:
           - exception
           - return_code
           - return_result
-          - stderr
           - script_exit_code
+          - stderr
           - scriptName: output_0
         navigate:
           - SUCCESS: check_if_filename_exists
@@ -361,8 +361,8 @@ flow:
           - exception
           - return_code
           - return_result
-          - stderr
           - script_exit_code
+          - stderr
           - fileExists: '${return_result}'
         navigate:
           - SUCCESS: string_equals
@@ -413,9 +413,9 @@ flow:
         publish:
           - exception
           - return_code
-          - stderr
           - return_result
           - script_exit_code
+          - stderr
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure

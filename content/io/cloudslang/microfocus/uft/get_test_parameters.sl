@@ -265,12 +265,13 @@ flow:
             - test_path: '${test_path}'
             - uft_workspace_path: '${uft_workspace_path}'
         publish:
-          - script_name
           - exception
-          - return_code
           - stderr
-          - script_exit_code
           - return_result
+          - return_code
+          - script_exit_code
+          - script_name
+
         navigate:
           - FAILURE: on_failure
           - SUCCESS: trigger_vb_script
@@ -301,9 +302,9 @@ flow:
             - script: "${'invoke-expression \"cmd /C cscript ' + script_name + '\"'}"
         publish:
           - exception
-          - return_code
           - stderr
           - return_result
+          - return_code
           - script_exit_code
           - parameters: "${return_result.replace('::',':<no_value>:')}"
         navigate:
@@ -357,9 +358,9 @@ flow:
             - script: "${'Remove-Item \"' + script_name +'\"'}"
         publish:
           - exception
-          - return_code
           - stderr
           - return_result
+          - return_code
           - script_exit_code
         navigate:
           - SUCCESS: SUCCESS
@@ -392,21 +393,21 @@ flow:
             - script: "${'Remove-Item \"' + script_name + '\"'}"
         publish:
           - exception
-          - return_code
           - stderr
           - return_result
+          - return_code
           - script_exit_code
         navigate:
           - SUCCESS: FAILURE
           - FAILURE: on_failure
 
   outputs:
-    - parameters
     - exception
-    - return_code
-    - return_result
     - stderr
+    - return_result
+    - return_code
     - script_exit_code
+    - parameters
     - script_name: ${get('script_name', '')}
 
   results:
