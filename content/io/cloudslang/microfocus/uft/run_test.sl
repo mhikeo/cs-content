@@ -219,15 +219,15 @@ flow:
   name: run_test
   inputs:
     - host
-    - port:
-        required: false
-    - protocol:
-        required: false
     - username:
         required: false
     - password:
         required: false
         sensitive: true
+    - port:
+        required: false
+    - protocol:
+        required: false
     - is_test_visible
     - test_path
     - test_results_path

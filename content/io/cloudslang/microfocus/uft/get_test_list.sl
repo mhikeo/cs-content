@@ -212,15 +212,15 @@ flow:
   name: get_test_list
   inputs:
     - host
-    - port:
-        required: false
-    - protocol:
-        required: false
     - username:
         required: false
     - password:
         required: false
         sensitive: true
+    - port:
+        required: false
+    - protocol:
+        required: false
     - test_path
     -  auth_type:
         default: 'basic'

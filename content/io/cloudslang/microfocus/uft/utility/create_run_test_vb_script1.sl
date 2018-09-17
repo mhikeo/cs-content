@@ -218,15 +218,15 @@ flow:
   name: create_run_test_vb_script1
   inputs:
     - host
-    - port:
-        required: false
-    - protocol:
-        required: false
     - username:
         required: false
     - password:
         required: false
         sensitive: true
+    - port:
+        required: false
+    - protocol:
+        required: false
     - is_test_visible: 'True'
     - test_path
     - test_results_path

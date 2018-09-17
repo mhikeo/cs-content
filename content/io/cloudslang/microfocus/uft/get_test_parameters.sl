@@ -210,15 +210,15 @@ flow:
   name: get_test_parameters
   inputs:
     - host
-    - port:
-        required: false
-    - protocol:
-        required: false
     - username:
         required: false
     - password:
         required: false
         sensitive: true
+    - port:
+        required: false
+    - protocol:
+        required: false
     - test_path
     - uft_workspace_path
     -  auth_type:
