@@ -296,6 +296,12 @@ flow:
                   - first_string: '${folders}'
                   - second_string: ''
                   - ignore_case: 'false'
+              publish:
+              - exception
+              - return_code
+              - stderr
+              - script_exit_code
+              - return_result
               navigate:
                 - SUCCESS: FAILURE
                 - FAILURE: length
