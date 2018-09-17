@@ -297,8 +297,8 @@ flow:
                   - second_string: ''
                   - ignore_case: 'false'
               navigate:
-                - SUCCESS: length
-                - FAILURE: FAILURE
+                - SUCCESS: FAILURE
+                - FAILURE: length
     - length:
         do:
           lists.length:
