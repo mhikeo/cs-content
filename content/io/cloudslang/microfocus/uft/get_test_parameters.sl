@@ -309,6 +309,27 @@ flow:
         navigate:
           - SUCCESS: string_equals
           - FAILURE: delete_vb_script_1
+
+    - string_equals:
+            do:
+              strings.string_equals:
+                - first_string: '${script_exit_code}'
+                - second_string: '0'
+                - ignore_case: 'true'
+            navigate:
+              - SUCCESS: string_equals1
+              - FAILURE: delete_vb_script_1
+
+    - string_equals1:
+            do:
+              strings.string_equals:
+                - first_string: '${return_result}'
+                - second_string: ''
+                - ignore_case: 'false'
+            navigate:
+              - SUCCESS: FAILURE
+              - FAILURE: delete_vb_script
+
     - delete_vb_script:
         do:
           ps.powershell_script:
@@ -343,6 +364,7 @@ flow:
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: SUCCESS
+
     - delete_vb_script_1:
         do:
           ps.powershell_script:
@@ -377,15 +399,7 @@ flow:
         navigate:
           - SUCCESS: FAILURE
           - FAILURE: on_failure
-    - string_equals:
-            do:
-              strings.string_equals:
-                - first_string: '${script_exit_code}'
-                - second_string: '0'
-                - ignore_case: 'true'
-            navigate:
-              - SUCCESS: delete_vb_script
-              - FAILURE: delete_vb_script_1
+
   outputs:
     - parameters
     - exception
@@ -399,38 +413,3 @@ flow:
     - FAILURE
     - SUCCESS
 
-extensions:
-  graph:
-    steps:
-      create_get_robot_params_vb_script:
-        x: 49
-        y: 84
-      trigger_vb_script:
-        x: 344
-        y: 76
-      delete_vb_script:
-        x: 585
-        y: 80
-        navigate:
-          dcf12e0f-57e6-2c88-a65e-a1f3651e7ee4:
-            targetId: 023c90fc-05ed-adf3-eb3c-da02c1f4333a
-            port: SUCCESS
-          82467eb7-5ac6-1523-0211-d9ec99424bdb:
-            targetId: 023c90fc-05ed-adf3-eb3c-da02c1f4333a
-            port: FAILURE
-      delete_vb_script_1:
-        x: 585
-        y: 242
-        navigate:
-          6585b707-8ed3-ad4a-4c92-06a5c32e5b7a:
-            targetId: 9075912d-0472-2f13-bd04-f716ea7744ed
-            port: SUCCESS
-    results:
-      FAILURE:
-        9075912d-0472-2f13-bd04-f716ea7744ed:
-          x: 823
-          y: 231
-      SUCCESS:
-        023c90fc-05ed-adf3-eb3c-da02c1f4333a:
-          x: 824
-          y: 83
