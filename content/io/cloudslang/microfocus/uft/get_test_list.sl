@@ -297,7 +297,7 @@ flow:
             - ignore_case: 'false'
         navigate:
           - SUCCESS: length
-          - FAILURE: on_failure
+          - FAILURE: FAILURE
 
     - string_equals:
         do:
@@ -402,7 +402,7 @@ flow:
           - FAILURE: on_failure
 
   outputs:
-    - tests: '${tests_list.rstrip(",")}'
+    - tests: ${get('tests_list.rstrip(",")', '')}
     - exception
     - return_code
     - stderr
