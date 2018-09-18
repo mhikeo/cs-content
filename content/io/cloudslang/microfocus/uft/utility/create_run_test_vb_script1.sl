@@ -215,7 +215,7 @@ imports:
   prop: io.cloudslang.microfocus.uft
 
 flow:
-  name: create_run_test_vb_script_no_parameters
+  name: create_run_test_vb_script1
   inputs:
     - host
     - username:
