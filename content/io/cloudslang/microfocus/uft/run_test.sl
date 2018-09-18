@@ -275,7 +275,7 @@ flow:
             - FAILURE: create_trigger_robot_vb_script
       - create_trigger_robot_vb_script:
           do:
-            utility.create_run_test_vb_script1:
+            utility.create_run_test_vb_script:
               - host
               - port
               - protocol
