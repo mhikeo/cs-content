@@ -218,15 +218,15 @@ flow:
   name: create_run_test_vb_script
   inputs:
     - host
-    - port:
-        required: false
-    - protocol:
-        required: false
     - username:
         required: false
     - password:
         required: false
         sensitive: true
+    - port:
+        required: false
+    - protocol:
+        required: false
     - is_test_visible: 'True'
     - test_path
     - test_results_path
@@ -461,42 +461,42 @@ flow:
 extensions:
   graph:
     steps:
-      add_test_results_path:
-        x: 92
-        y: 357
       create_folder_structure:
-        x: 660
-        y: 364
+        x: 1108
+        y: 56
       add_parameters:
-        x: 666
-        y: 139
-      is_test_visible:
-        x: 366
-        y: 353
+        x: 893
+        y: 53
       check_if_filename_exists:
-        x: 974
-        y: 365
+        x: 1101
+        y: 300
       add_parameter:
-        x: 358
-        y: 143
+        x: 675
+        y: 56
       add_numbers:
-        x: 1307
-        y: 368
+        x: 908
+        y: 506
       string_equals:
-        x: 1001
-        y: 147
+        x: 936
+        y: 278
       add_test_path:
-        x: 100
-        y: 150
+        x: 40
+        y: 58
+      is_test_visible:
+        x: 461
+        y: 55
       create_vb_script:
-        x: 1305
-        y: 157
+        x: 502
+        y: 286
         navigate:
-          83c47325-2a49-d09d-2896-f1352a114a41:
-            targetId: fbdddb13-1c72-ade3-566f-e341dcbd36c7
+          c3db07a5-d125-3877-5aba-a4077607d789:
+            targetId: 09dd53a1-80a5-775c-ecf2-2930999b2b46
             port: SUCCESS
+      add_test_results_path:
+        x: 251
+        y: 57
     results:
       SUCCESS:
-        fbdddb13-1c72-ade3-566f-e341dcbd36c7:
-          x: 1625
-          y: 149
+        09dd53a1-80a5-775c-ecf2-2930999b2b46:
+          x: 498
+          y: 514

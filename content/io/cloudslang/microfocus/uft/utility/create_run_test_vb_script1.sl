@@ -218,15 +218,15 @@ flow:
   name: create_run_test_vb_script1
   inputs:
     - host
-    - port:
-        required: false
-    - protocol:
-        required: false
     - username:
         required: false
     - password:
         required: false
         sensitive: true
+    - port:
+        required: false
+    - protocol:
+        required: false
     - is_test_visible: 'True'
     - test_path
     - test_results_path
@@ -297,6 +297,7 @@ flow:
         navigate:
           - SUCCESS: create_folder_structure
           - FAILURE: on_failure
+
     - create_folder_structure:
         do:
           ps.powershell_script:
@@ -385,6 +386,7 @@ flow:
         navigate:
           - SUCCESS: check_if_filename_exists
           - FAILURE: on_failure
+
     - create_vb_script:
         do:
           ps.powershell_script:
@@ -433,3 +435,39 @@ flow:
     - FAILURE
     - SUCCESS
 
+extensions:
+  graph:
+    steps:
+      add_test_path:
+        x: 41
+        y: 94
+      add_test_results_path:
+        x: 285
+        y: 92
+      is_test_visible:
+        x: 502
+        y: 90
+      create_folder_structure:
+        x: 741
+        y: 92
+      check_if_filename_exists:
+        x: 992
+        y: 89
+      string_equals:
+        x: 1156
+        y: 337
+      create_vb_script:
+        x: 757
+        y: 345
+        navigate:
+          f5e101c2-e77a-453f-0f18-a770c28b7f71:
+            targetId: 2baa11c5-df34-71bb-31c1-6d0eed683338
+            port: SUCCESS
+      add_numbers:
+        x: 1234
+        y: 96
+    results:
+      SUCCESS:
+        2baa11c5-df34-71bb-31c1-6d0eed683338:
+          x: 573
+          y: 352
