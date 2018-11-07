@@ -141,7 +141,7 @@ flow:
         do:
           io.cloudslang.amazon.aws.servicecatalog.products.update_provisioned_product:
             - identity
-            - credential:
+            - credential: '${credential}'
                 sensitive: true
             - proxy_host
             - proxy_port

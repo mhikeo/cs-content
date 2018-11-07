@@ -98,7 +98,7 @@ flow:
       do:
         io.cloudslang.amazon.aws.servicecatalog.products.unprovision_product:
         - identity
-        - credential:
+        - credential: '${credential}'
             sensitive: true
         - proxy_host
         - proxy_port
