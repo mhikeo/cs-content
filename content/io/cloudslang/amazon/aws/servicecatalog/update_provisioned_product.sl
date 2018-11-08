@@ -145,8 +145,7 @@ flow:
             - proxy_host
             - proxy_port
             - proxy_username
-            - proxy_password:
-                sensitive: true
+            - proxy_password
             - connect_timeout
             - execution_timeout
             - polling_interval
