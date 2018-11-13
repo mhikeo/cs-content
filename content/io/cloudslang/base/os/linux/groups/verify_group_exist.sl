@@ -47,7 +47,11 @@ flow:
 
   inputs:
     - host
+    - username:
+        default: 'root'
+    - private_key_file
     - root_password:
+        required: false
         sensitive: true
     - group_name
 
@@ -57,8 +61,9 @@ flow:
           ssh.ssh_flow:
             - host
             - port: '22'
-            - username: 'root'
+            - username
             - password: ${root_password}
+            - private_key_file
             - command: >
                 ${'cat /etc/group | grep ' + group_name +  ' | cut -d \":\" -f1 | grep ' + group_name}
         publish:
