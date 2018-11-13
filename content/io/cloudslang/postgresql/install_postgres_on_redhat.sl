@@ -1,3 +1,44 @@
+########################################################################################################################
+#!!
+#! @description: Performs several linux commands in order to deploy install postgresql application on machines that are running
+#!               Red Hat based linux
+#!
+#! @prerequisites: Java package
+#!
+#! @input hostname: hostname or IP address
+#! @input username: username
+#! @input password: The root or priviledged account password
+#! @input proxy_host: Optional - The proxy server used to access the remote machine.
+#! @input proxy_port: Optional - The proxy server port.
+#!                    Valid values: -1 and numbers greater than 0.
+#!                    Default: '8080'
+#! @input proxy_username: Optional - The user name used when connecting to the proxy.
+#! @input proxy_password: Optional - The proxy server password associated with the proxy_username input value.
+#! @input connection_timeout: Optional - Time in milliseconds to wait for the connection to be made.
+#!                         Default value: '10000'
+#! @input execution_timeout: Optional - Time in milliseconds to wait for the command to complete.
+#!                 Default: '90000'
+#! @input installation_file: Optional - the postgresql installation file or link - Default: 'https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat96-9.6-3.noarch.rpm'
+#! @input service_name: The service name
+#! @input service_account: The service account
+#! @input service_password: The service password
+#! @input private_key_file: Optional - the private key
+#!
+#! @output return_result: STDOUT of the remote machine in case of success or the cause of the error in case of exception
+#! @output return_code: '0' if success, '-1' otherwise
+#! @output exception: contains the stack trace in case of an exception
+#!
+#! @result SUCCESS: Postgresql install and/or startup was successful
+#! @result POSTGRES_PROCESS_CHECK_FAILURE: There was an error checking postgresql process
+#! @result POSTGRES_VERIFY_INSTALL_FAILURE: error verifying installation
+#! @result POSTGRES_VERIFY_RPM_FAILURE: error verifying existence of postgresql rpm installer
+#! @result POSTGRES_INSTALL_RPM_REPO_FAILURE: error installation postgresql rpm repo
+#! @result POSTGRES_INSTALL_PACKAGE_FAILURE: error installing postgresql package
+#! @result POSTGRES_INIT_DB_FAILURE: error initializing db
+#! @result POSTGRES_START_FAILURE: error starting postgresql
+#!!#
+########################################################################################################################
+
 namespace: io.cloudslang.postgresql
 
 imports:
@@ -7,6 +48,7 @@ imports:
   groups: io.cloudslang.base.os.linux.groups
   users: io.cloudslang.base.os.linux.users
   strings: io.cloudslang.base.strings
+  postgres: io.cloudslang.postgresql
 
 flow:
   name: install_postgres_on_redhat
@@ -16,58 +58,45 @@ flow:
         required: true
     - username:
         sensitive: true
-    # - password:
-    #     default: ''
-    #     required: false
-    #     sensitive: true
-    # - proxy_host
-    # - proxy_port
-    # - proxy_username
-    # - proxy_password
-    # - connecion_timeout:
-    #     default: '10'
-    # - execution_timeout:
-    #     default: '90'
-    # - installation_file:
-    #     required: true
-    # - installation_location:
-    #     required: true
-    # - superuser_password:
-    #     default: 'postgres'
-    #     required: true
-    # - add_in_path:
-    #     default: 'false'
-    # - create_shortcuts:
-    #     default: 'yes'
-    # - data_dir
-    # - debug_level:
-    #     default: '2'
-    # - debug_trace
-    # - disable_stackbuilder
-    # - extract_only:
-    #     default: 'false'
-    # - help
-    # - installer_language:
-    #     default: 'en'
-    # - install_plpgsql:
-    #     default: 'true'
-    # - install_runtimes:
-    #     default: 'true'
-    # - locale
-    # - mode
-    # - option_file
-    # - prefix
-    # - server_port
+    - password:
+        default: ''
+        required: false
+        sensitive: true
+    - proxy_host:
+        required: false
+    - proxy_port:
+        required: false
+    - proxy_username:
+        required: false
+    - proxy_password:
+        required: false
+    - connection_timeout:
+        default: '10000'
+    - execution_timeout:
+        default: '90000'
+    - installation_file:
+        default: 'https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat96-9.6-3.noarch.rpm'
+        required: false
     - service_account:
         default: 'postgres'
-    # - service_name:
-    #     default: 'postgresql-9.6'
-    # - service_password:
-    #     default: superuser_password
+    - service_name:
+        default: 'postgresql-9.6'
+    - service_password:
+        default: 'postgres'
     - private_key_file:
         default: '/Users/mhjkc/Downloads/mhike-oregon-key-01.pem'
 
   workflow:
+    - derive_postgres_version:
+        do:
+          postgres.derive_postgres_version:
+            - service_name
+        publish:
+          - pkg_name
+          - home_dir
+        navigate:
+          - SUCCESS: verify_if_postgres_is_running
+
     - verify_if_postgres_is_running:
         do:
           ssh.ssh_flow:
@@ -75,8 +104,14 @@ flow:
             - port: '22'
             - username
             - private_key_file
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - timeout: ${execution_timeout}
+            - connect_timeout: ${connection_timeout}
             - command: >
-                ${'systemctl status postgresql-10.service | tail -1'}
+                ${'systemctl status ' + service_name + '.service | tail -1'}
         publish:
           - return_result
           - standard_err
@@ -104,8 +139,14 @@ flow:
             - port: '22'
             - username
             - private_key_file
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - timeout: ${execution_timeout}
+            - connect_timeout: ${connection_timeout}
             - command: >
-                ${'export LC_ALL=\"en_US.UTF-8\" && sudo yum list installed | grep postgresql10 | cut -d \".\" -f1'}
+                ${'export LC_ALL=\"en_US.UTF-8\" && sudo yum list installed | grep ' + pkg_name + ' | cut -d \".\" -f1'}
         publish:
           - return_result
           - standard_err
@@ -120,7 +161,7 @@ flow:
         do:
           strings.string_occurrence_counter:
             - string_in_which_to_search: ${standard_out}
-            - string_to_find: 'postgresql10-server'
+            - string_to_find: ${pkg_name + '-server'}
         navigate:
           - SUCCESS: start_postgres
           - FAILURE: verify_if_rpms_are_locally_available
@@ -132,8 +173,14 @@ flow:
             - port: '22'
             - username
             - private_key_file
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - timeout: ${execution_timeout}
+            - connect_timeout: ${connection_timeout}
             - command: >
-                ${'rpm -qa | grep postgresql10 | cut -d "." -f1'}
+                ${'rpm -qa | grep ' + pkg_name + ' | cut -d "." -f1'}
         publish:
           - return_result
           - standard_err
@@ -148,7 +195,7 @@ flow:
         do:
           strings.string_occurrence_counter:
             - string_in_which_to_search: ${standard_out}
-            - string_to_find: 'postgresql10-server'
+            - string_to_find: ${pkg_name + '-server'}
         navigate:
           - SUCCESS: install_server_packages
           - FAILURE: install_repository_rpm
@@ -160,8 +207,14 @@ flow:
             - port: '22'
             - username
             - private_key_file
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - timeout: ${execution_timeout}
+            - connect_timeout: ${connection_timeout}
             - command: >
-                ${'export LC_ALL=\"en_US.UTF-8\" && sudo yum -y -q install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-redhat10-10-2.noarch.rpm'}
+                ${'export LC_ALL=\"en_US.UTF-8\" && sudo yum -y -q install ' + installation_file}
         publish:
           - return_result
           - standard_err
@@ -179,8 +232,14 @@ flow:
             - port: '22'
             - username
             - private_key_file
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - timeout: ${execution_timeout}
+            - connect_timeout: ${connection_timeout}
             - command: >
-                ${'export LC_ALL=\"en_US.UTF-8\" && sudo yum -y install postgresql10-server postgresql10-contrib'}
+                ${'export LC_ALL=\"en_US.UTF-8\" && sudo yum -y install ' + pkg_name + '-server ' + pkg_name + '-contrib'}
         publish:
           - return_result
           - standard_err
@@ -198,8 +257,14 @@ flow:
             - port: '22'
             - username
             - private_key_file
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - timeout: ${execution_timeout}
+            - connect_timeout: ${connection_timeout}
             - command: >
-                ${'sudo /usr/pgsql-10/bin/postgresql-10-setup initdb'}
+                ${'sudo /usr/' + home_dir + '/bin/' + service_name + '-setup initdb'}
         publish:
           - return_result
           - standard_err
@@ -208,7 +273,7 @@ flow:
           - command_return_code
         navigate:
           - SUCCESS: check_postgres_db_initialized
-          - FAILURE: PORTGRES_INIT_DB_FAILURE
+          - FAILURE: POSTGRES_INIT_DB_FAILURE
 
     - check_postgres_db_initialized:
         do:
@@ -219,7 +284,7 @@ flow:
           - return_result
         navigate:
           - SUCCESS: start_postgres
-          - FAILURE: PORTGRES_INIT_DB_FAILURE
+          - FAILURE: POSTGRES_INIT_DB_FAILURE
 
     - start_postgres:
         do:
@@ -228,8 +293,14 @@ flow:
             - port: '22'
             - username
             - private_key_file
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - timeout: ${execution_timeout}
+            - connect_timeout: ${connection_timeout}
             - command: >
-                ${'sudo systemctl enable postgresql-10 && sudo systemctl start postgresql-10 && sleep 15s && sudo systemctl status postgresql-10 | tail -1'}
+                ${'sudo systemctl enable ' + service_name + ' && sudo systemctl start ' + service_name + ' && sleep 15s && sudo systemctl status ' + service_name + ' | tail -1'}
         publish:
           - return_result
           - standard_err
@@ -254,20 +325,15 @@ flow:
 
   outputs:
     - return_result
-    - standard_err
-    - standard_out
     - return_code
-    - command_return_code
     - exception
-    - message
 
   results:
     - SUCCESS
     - POSTGRES_PROCESS_CHECK_FAILURE
     - POSTGRES_VERIFY_INSTALL_FAILURE
-    # - POSTGRES_INSTALL_CHECK_FAILURE
     - POSTGRES_VERIFY_RPM_FAILURE
     - POSTGRES_INSTALL_RPM_REPO_FAILURE
     - POSTGRES_INSTALL_PACKAGE_FAILURE
-    - PORTGRES_INIT_DB_FAILURE
+    - POSTGRES_INIT_DB_FAILURE
     - POSTGRES_START_FAILURE
