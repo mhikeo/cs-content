@@ -80,11 +80,11 @@ flow:
     - service_account:
         default: 'postgres'
     - service_name:
-        default: 'postgresql-9.6'
+        default: 'postgresql-10'
     - service_password:
         default: 'postgres'
     - private_key_file:
-        default: '/Users/mhjkc/Downloads/mhike-oregon-key-01.pem'
+        required: false
 
   workflow:
     - derive_postgres_version:
@@ -317,7 +317,7 @@ flow:
             - string_in_which_to_search: ${standard_out}
             - string_to_find: 'Started'
         publish:
-          - return_result
+          - return_result: 'The PostgreSQL server was successfully installed'
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: POSTGRES_START_FAILURE

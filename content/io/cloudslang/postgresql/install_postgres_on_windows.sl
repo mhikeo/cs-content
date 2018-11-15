@@ -49,7 +49,7 @@ flow:
 
   inputs:
     - hostname:
-        default: 'ec2-34-220-130-20.us-west-2.compute.amazonaws.com'
+        default: '52.13.110.166'
         required: true
     - port:
         required: false
@@ -57,7 +57,7 @@ flow:
         default: 'Administrator'
         sensitive: true
     - password:
-        default: 'OeSM2hZE3G;iFjDhx!!VihxyGRI?iKcK'
+        default: '=%4WWALw=.gmnN9Ocv$BdZ.3JUJG9K*j'
         required: false
         sensitive: true
     - proxy_host:
@@ -71,23 +71,84 @@ flow:
     - connection_timeout:
         default: '10000'
     - execution_timeout:
-        default: '90000'
+        default: '300000'
     - installation_file:
-        default: 'https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat96-9.6-3.noarch.rpm'
+        default: 'http://get.enterprisedb.com/postgresql/postgresql-10.6-1-windows-x64.exe'
         required: false
+    - installation_location:
+        default: 'C:\\Program Files\\PostgreSQL\\10.6'
+        required: false
+    - data_dir:
+        default: 'C:\\Program Files\\PostgreSQL\\10.6\\data'
+        required: false
+    - server_port:
+        default: '5432'
+        required: false
+    - service_name:
+        default: 'postgresql'
     - service_account:
         default: 'postgres'
-    - service_name:
-        default: 'postgresql-9.6'
     - service_password:
         default: 'postgres'
+    - locale:
+        default: 'English, United States'
+        required: false
 
   workflow:
-    - verify_if_active_directory_is_installed:
+    # - download_installer_module:
+    #     do:
+    #       scripts.powershell_script:
+    #         - host: ${hostname}
+    #         - port: '5985'
+    #         - protocol: 'http'
+    #         - username
+    #         - password
+    #         - proxy_host
+    #         - proxy_port
+    #         - proxy_username
+    #         - proxy_password
+    #         - script: >
+    #             ${'(New-Object Net.WebClient).DownloadFile(\"https://drive.google.com/uc?export=download&id=1gsjRnxKx8J_WhmdaJ5PPBcAnjj6WKUud\",\"C:\Windows\Temp\Install-Postgres.zip\");(new-object -com shell.application).namespace(\"C:\Program Files\WindowsPowerShell\Modules\").CopyHere((new-object -com shell.application).namespace(\"C:\Windows\Temp\Install-Postgres.zip\").Items(),16)'}
+    #     publish:
+    #       - return_result
+    #       - standard_err
+    #       - standard_out
+    #       - return_code
+    #       - command_return_code
+    #     navigate:
+    #       - SUCCESS: SUCCESS
+    #       - FAILURE: SUCCESS
+
+    # - import_module:
+    #     do:
+    #       scripts.powershell_script:
+    #         - host: ${hostname}
+    #         - port: '5985'
+    #         - protocol: 'http'
+    #         - username
+    #         - password
+    #         - proxy_host
+    #         - proxy_port
+    #         - proxy_username
+    #         - proxy_password
+    #         - script: >
+    #             ${'Import-Module Install-Postgres'}
+    #     publish:
+    #       - return_result
+    #       - standard_err
+    #       - standard_out
+    #       - return_code
+    #       - command_return_code
+    #     navigate:
+    #       - SUCCESS: SUCCESS
+    #       - FAILURE: SUCCESS
+
+    - install_postgres:
         do:
           scripts.powershell_script:
             - host: ${hostname}
-            - port
+            - port: '5985'
+            - protocol: 'http'
             - username
             - password
             - proxy_host
@@ -95,7 +156,7 @@ flow:
             - proxy_username
             - proxy_password
             - script: >
-                ${'Get-Module -ListAvailable -Name ActiveDirectory'}
+                ${'Install-Postgres -User \"' + username + '\" -Password \"' + password + '\" -InstallerUrl \"' + installation_file + '\" -InstallPath \"' + installation_location + '\" -DataPath \"' + data_dir + '\" -Locale \"' + locale + '\" -Port ' + server_port + ' -ServiceName \"' + service_name + '\"'}
         publish:
           - return_result
           - standard_err
@@ -104,7 +165,7 @@ flow:
           - command_return_code
         navigate:
           - SUCCESS: SUCCESS
-          - FAILURE: SUCCESS
+          - FAILURE: POSTGRES_INSTALL_PACKAGE_FAILURE
 
   outputs:
     - return_result
@@ -116,3 +177,4 @@ flow:
 
   results:
     - SUCCESS
+    - POSTGRES_INSTALL_PACKAGE_FAILURE
