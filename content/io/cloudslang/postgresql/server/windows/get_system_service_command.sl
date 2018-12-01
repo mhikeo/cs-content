@@ -3,17 +3,22 @@
 #! @description: Get the PowerShell command to start/restart/stop/get status a postgres service
 #!
 #! @input service_name: service name
-#! @input operation_name: operation name
+#! @input operation: operation name
 #!
 #! @output pwsh_command: PowerShell command
+#! @output return_result: STDOUT of the remote machine in case of success or the cause of the error in case of exception
+#! @output return_code: Return code of the command
+#! @output exception: Contains the stack trace in case of an exception
 #!
+#! @result SUCCESS: the command was executed successfully
+#! @result FAILURE: There was an error
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql
+namespace: io.cloudslang.postgresql.server.windows
 
 operation:
-  name: pwsh_service_command
+  name: get_system_service_command
 
   inputs:
     - service_name:

@@ -75,7 +75,7 @@
 #!
 #! @output return_result: STDOUT of the remote machine in case of success or the cause of the error in case of exception
 #! @output return_code: '0' if success, '-1' otherwise
-#! @output exception: contains the stack trace in case of an exception
+#! @output stderr: contains the stack trace in case of an exception
 #!
 #! @result SUCCESS: Postgresql install and/or startup was successful
 #! @result DOWNLOAD_INSTALLER_MODULE_FAILURE: There was an error downloading or extracting the installer module
@@ -83,7 +83,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql
+namespace: io.cloudslang.postgresql.server
 
 imports:
   scripts: io.cloudslang.base.powershell
@@ -162,99 +162,6 @@ flow:
         required: false
 
   workflow:
-    - verify_if_postgres_is_installed:
-        do:
-          scripts.powershell_script:
-            - host: ${hostname}
-            - port
-            - protocol
-            - username
-            - password
-            - proxy_host
-            - proxy_port
-            - proxy_username
-            - proxy_password
-            - operation_timeout: ${execution_timeout}
-            - script: >
-                ${'Get-Service'}
-        publish:
-          -  return_code
-          -  return_result
-          -  stderr
-          -  script_exit_code
-          -  exception
-        navigate:
-          - SUCCESS: check_if_postgres_is_installed_result
-          - FAILURE: VERIFY_IF_POSTGRES_IS_INSTALLED_FAILURE
-
-    - check_if_postgres_is_installed_result:
-        do:
-          strings.string_occurrence_counter:
-            - string_in_which_to_search: ${return_result}
-            - string_to_find: ${service_name}
-        navigate:
-          - SUCCESS: POSTGRES_ALREADY_INSTALLED
-          - FAILURE: verify_if_postgres_user_exists
-
-    - verify_if_postgres_user_exists:
-        do:
-          scripts.powershell_script:
-            - host: ${hostname}
-            - port
-            - protocol
-            - username
-            - password
-            - proxy_host
-            - proxy_port
-            - proxy_username
-            - proxy_password
-            - operation_timeout: ${execution_timeout}
-            - script: >
-                ${'Get-LocalUser'}
-        publish:
-          -  return_code
-          -  return_result
-          -  stderr
-          -  script_exit_code
-          -  exception
-        navigate:
-          - SUCCESS: check_if_postgres_user_exists_result
-          - FAILURE: VERIFY_IF_POSTGRES_USER_EXISTS_FAILURE
-
-    - check_if_postgres_user_exists_result:
-        do:
-          strings.string_occurrence_counter:
-            - string_in_which_to_search: ${return_result}
-            - string_to_find: ${service_account}
-        navigate:
-          - SUCCESS: remove_user
-          - FAILURE: download_installer_module
-
-    - remove_user:
-        do:
-          scripts.powershell_script:
-            - host: ${hostname}
-            - port
-            - protocol
-            - username
-            - password
-            - proxy_host
-            - proxy_port
-            - proxy_username
-            - proxy_password
-            - operation_timeout: ${execution_timeout}
-            - script: >
-                ${'Remove-LocalUser -Name ' + service_account}
-        publish:
-          -  return_code
-          -  return_result
-          -  stderr
-          -  script_exit_code
-          -  exception
-        navigate:
-          - SUCCESS: download_installer_module
-          - FAILURE: REMOVE_USER_FAILURE
-
     - download_installer_module:
         do:
           scripts.powershell_script:
@@ -330,9 +237,5 @@ flow:
 
   results:
     - SUCCESS
-    - POSTGRES_ALREADY_INSTALLED
-    - VERIFY_IF_POSTGRES_IS_INSTALLED_FAILURE
-    - VERIFY_IF_POSTGRES_USER_EXISTS_FAILURE
-    - REMOVE_USER_FAILURE
     - DOWNLOAD_INSTALLER_MODULE_FAILURE
     - POSTGRES_INSTALL_PACKAGE_FAILURE

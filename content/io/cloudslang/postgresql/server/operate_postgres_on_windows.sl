@@ -19,7 +19,7 @@
 #! @input proxy_username: The user name used when connecting to the proxy
 #!                        Optional
 #! @input proxy_password: The proxy server password associated with the proxy_username input value
-#!                        Optional 
+#!                        Optional
 #! @input execution_timeout: Time in seconds to wait for the command to complete.
 #!                           Default: '180'
 #!                           Optional
@@ -48,7 +48,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql
+namespace: io.cloudslang.postgresql.server
 
 imports:
   base: io.cloudslang.base.cmd
@@ -58,7 +58,7 @@ imports:
   scripts: io.cloudslang.base.powershell
 
 flow:
-  name: postgres_operation_on_windows
+  name: operate_postgres_on_windows
 
   inputs:
     - hostname:
@@ -111,7 +111,7 @@ flow:
             - proxy_password
             - operation_timeout: ${execution_timeout}
             - script: >
-                ${'Test-Path -Path "'+ installation_location +'"'}
+                ${'$is_found = Test-Path -Path "'+ installation_location +'"; ; if(!$is_found) {" installation_location was not found"; Exit(1)}'}
         publish:
           -  return_code
           -  return_result
@@ -119,18 +119,8 @@ flow:
           -  script_exit_code
           -  exception
         navigate:
-          - SUCCESS: check_installation_location_result
+          - SUCCESS: check_data_dir
           - FAILURE: FAILURE
-
-    - check_installation_location_result:
-        do:
-          utils.is_true:
-            - bool_value: ${return_result}
-        publish:
-          - return_result: 'The installation location was not found.'
-        navigate:
-          - 'TRUE': check_data_dir
-          - 'FALSE': FAILURE
 
     - check_data_dir:
         do:
@@ -146,7 +136,7 @@ flow:
             - proxy_password
             - operation_timeout: ${execution_timeout}
             - script: >
-                ${'Test-Path -Path "'+ data_dir +'"'}
+                 ${'$is_found = Test-Path -Path "'+ data_dir +'"; ; if(!$is_found) {" Data_dir was not found"; Exit(1)}'}
         publish:
           -  return_code
           -  return_result
@@ -154,18 +144,8 @@ flow:
           -  script_exit_code
           -  exception
         navigate:
-          - SUCCESS: check_data_dir_result
+          - SUCCESS: check_operation_value
           - FAILURE: FAILURE
-
-    - check_data_dir_result:
-        do:
-          utils.is_true:
-            - bool_value: ${return_result}
-        publish:
-          - return_result: 'The data_dir was not found.'
-        navigate:
-          - 'TRUE': check_operation_value
-          - 'FALSE': FAILURE
 
     - check_operation_value:
         do:
@@ -177,7 +157,7 @@ flow:
 
     - get_pwsh_command_by_operation_name:
         do:
-          pwsh_service_command:
+          postgres.server.windows.get_system_service_command:
              - service_name: ${service_name}
              - operation: ${operation}
         publish:

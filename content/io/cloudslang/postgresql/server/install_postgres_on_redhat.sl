@@ -17,7 +17,7 @@
 #! @input proxy_username: The user name used when connecting to the proxy
 #!                        Optional
 #! @input proxy_password: The proxy server password associated with the proxy_username input value
-#!                        Optional 
+#!                        Optional
 #! @input connection_timeout: Time in milliseconds to wait for the connection to be made
 #!                            Default value: '10000'
 #!                            Optional
@@ -51,7 +51,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql
+namespace: io.cloudslang.postgresql.server
 
 imports:
   ssh: io.cloudslang.base.ssh
@@ -101,7 +101,7 @@ flow:
   workflow:
     - derive_postgres_version:
         do:
-          postgres.derive_postgres_version:
+          postgres.server.redhat.derive_postgres_version:
             - service_name
         publish:
           - pkg_name
