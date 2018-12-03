@@ -23,7 +23,7 @@
 #!                           Default: '90000'
 #!                           Optional
 #! @input installation_location: The postgresql installation location
-#!                           Default: '/var/lib/pgsql/10'
+#!                           Default: '/var/lib/pgsql/10/data'
 #! @input pg_ctl_location: Path of the pg_ctl binary
 #!                         Default: '/usr/pgsql-10/bin'
 #! @input db_name: Specifies the name of the database to be created.
@@ -90,7 +90,7 @@ flow:
     - execution_timeout:
         default: '90000'
     - installation_location:
-        default: '/var/lib/pgsql/10'
+        default: '/var/lib/pgsql/10/data'
     - pg_ctl_location:
         default: '/usr/pgsql-10/bin'
     - db_name:
@@ -112,10 +112,9 @@ flow:
     - private_key_file:
         required: false
   workflow:
-      - check_postgress_is_running:
+      - check_postgress_status:
           do:
-             postgres.server.redhat.run_pg_ctl_command:
-                - operation: 'status'
+             postgres.server.redhat.check_postgres_is_up:
                 - installation_location
                 - pg_ctl_location
                 - hostname
@@ -129,10 +128,12 @@ flow:
                 - private_key_file
           publish:
               - return_result
-              - error_message
               - exception
               - return_code
               - standard_err
+          navigate:
+            - SUCCESS: build_createdb_command
+            - FAILURE: FAILURE
       - build_createdb_command:
          do:
             postgres.maintenance.commands.createdb_command:
@@ -179,7 +180,7 @@ flow:
 
   outputs:
     - return_result
-    - exception
+    - exception: ${get('exception','').strip()}
     - return_code :  ${"0" if exception == '' else "-1"}
   results:
     - SUCCESS

@@ -240,7 +240,8 @@ flow:
             - command: >
                 ${'scp -i ' + private_key_file + ' ' + configuration_file +' ' + username+ '@'+ hostname+':~'}
         publish:
-            - return_result: ${error_message}
+            - return_result
+            - exception: ${error_message}
             - return_code
         navigate:
           - SUCCESS: change_permission_and_move_file_to_postgress_installation_location
@@ -292,7 +293,8 @@ flow:
             - command: >
                ${'scp -i ' + private_key_file + ' ' + temp_local_folder+'/postgresql.conf ' + username+ '@'+ hostname+':~ && scp  -i ' + private_key_file + ' '+ temp_local_folder + '/pg_hba.conf ' + username+ '@'+ hostname+':~'}
         publish:
-            - return_result : ${error_message}
+            - return_result
+            - exception: ${error_message}
             - return_code
         navigate:
           - SUCCESS: change_permission_and_move_file_to_postgress_installation_location
@@ -314,7 +316,9 @@ flow:
            - command: >
                ${'sudo chgrp postgres /home/' + username +'/*.conf  && sudo chown postgres /home/' + username +'/*.conf  && sudo chmod 600 /home/' + username +'/*.conf && sudo mv -f /home/'+ username + '/*.conf ' + installation_location }
        publish:
-         - return_result: ${standard_err}
+         - return_result
+         - exception
+         - standard_err
          - return_code
          - command_return_code
        navigate:
