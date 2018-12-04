@@ -2,7 +2,7 @@ testCreateDbWithDefaultSettingsOnRedhatSuccess:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - private_key_file: './rhel-psql-aws.pem'
   description: "Tests that run create_db_on_redhat.sl to create a database with default settings and finishes with SUCCESS"
@@ -14,7 +14,7 @@ testCreateDbWithCustomSettingsOnRedhatSuccess:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - db_name: 'cs_test_custom'
     - db_description: 'cs\ test\ database'
@@ -34,7 +34,7 @@ testCreateDbWithInvalidUsernameOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'invalid-username'
     - private_key_file: './rhel-psql-aws.pem'
   description: "Test that run create_db_on_redhat.sl with invalid username and finishes with Auth failure"
@@ -46,7 +46,7 @@ testCreateDbWithInvalidInstallationLocationOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - installation_location: '/some/path'
     - private_key_file: './rhel-psql-aws.pem'
@@ -59,7 +59,7 @@ testCreateDbWithInvalidPgCtlLocationOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - pg_ctl_location: '/some/path'
     - private_key_file: './rhel-psql-aws.pem'
@@ -72,7 +72,7 @@ testCreateDbWithNonExsitingOwnerOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - db_owner: 'non-existing-db-owner'
     - private_key_file: './rhel-psql-aws.pem'
@@ -85,7 +85,7 @@ testCreateDbWithNonExsitingTemplateOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - db_template: 'non-existing-db-template'
     - private_key_file: './rhel-psql-aws.pem'
@@ -98,7 +98,7 @@ testCreateDbWithNonExsitingTablespaceOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - db_tablespace: 'non-existing-db-tablespace'
     - private_key_file: './rhel-psql-aws.pem'
@@ -111,7 +111,7 @@ testCreateDbWithInvalidLocaleOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - db_locale: 'invalid-locale'
     - private_key_file: './rhel-psql-aws.pem'
@@ -124,7 +124,7 @@ testCreateDbWithInvalidEncodingOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - db_encoding: 'invalid-encoding'
     - private_key_file: './rhel-psql-aws.pem'

@@ -2,7 +2,7 @@ testDropDbOnRedhatSuccess:
   testSuites: [postgresql, postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_drop_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - db_name: 'cs_test'
     - private_key_file: './rhel-psql-aws.pem'
@@ -13,7 +13,7 @@ testDropDbWithInvalidUsernameOnRedhatFailure:
   testSuites: [postgresql, postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'invalid-username'
     - private_key_file: './rhel-psql-aws.pem'
   description: "Test that run drop_db_on_redhat.sl with invalid username and finishes with Auth failure"
@@ -25,7 +25,7 @@ testDropDbWithInvalidInstallationLocationOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - installation_location: '/some/path'
     - private_key_file: './rhel-psql-aws.pem'
@@ -38,7 +38,7 @@ testDropDbWithInvalidPgCtlLocationOnRedhatFailure:
   testSuites: [postgresql,postgresql-maintenance]
   testFlowPath: io.cloudslang.postgresql.maintenance.test_create_db_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - pg_ctl_location: '/some/path'
     - private_key_file: './rhel-psql-aws.pem'

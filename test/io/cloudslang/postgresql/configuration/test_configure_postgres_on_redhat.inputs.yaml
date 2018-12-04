@@ -1,0 +1,21 @@
+testConfigurePostgresConfigWithCLIOnRedhatSuccess:
+  testSuites: [postgresql,postgresql-configuration]
+  testFlowPath: io.cloudslang.postgresql.configuration.test_configure_postgres_on_redhat
+  inputs:
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
+    - username: 'ec2-user'
+    - max_connections: '50'
+    - listen_addresses: 'localhost'
+    - port: '5432'
+    - ssl: 'off'
+    - ssl_ca_file: 'my_file.ca'
+    - ssl_cert_file: 'ssl_server.crt'
+    - ssl_key_file: 'server.key'
+    - shared_buffers: '129MB'
+    - effective_cache_size: '5GB'
+    - autovacuum: 'off'
+    - work_mem: '5MB'
+    - private_key_file: './rhel-psql-aws.pem'
+    - reboot: 'yes'
+  description: "Tests that run configure_postgres_on_redhat.sl to update parameters from CLI and finishes with SUCCESS"
+  result: SUCCESS

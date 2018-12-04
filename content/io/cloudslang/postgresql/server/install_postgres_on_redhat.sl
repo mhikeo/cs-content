@@ -107,6 +107,7 @@ flow:
           - pkg_name
           - home_dir
           - initdb_dir
+          - setup_file
         navigate:
           - SUCCESS: verify_if_postgres_is_running
 
@@ -286,7 +287,7 @@ flow:
             - timeout: ${execution_timeout}
             - connect_timeout: ${connection_timeout}
             - command: >
-                ${'sudo rm -fR ' + initdb_dir + '/data && sudo /usr/' + home_dir + '/bin/' + service_name + '-setup initdb'}
+                ${'sudo rm -fR ' + initdb_dir + '/data && sudo /usr/' + home_dir + '/bin/' + setup_file + ' initdb'}
         publish:
           - return_result
           - standard_err
