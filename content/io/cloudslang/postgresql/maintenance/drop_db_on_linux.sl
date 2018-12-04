@@ -52,7 +52,7 @@ imports:
   print: io.cloudslang.base.print
 
 flow:
-  name: drop_db_on_redhat
+  name: drop_db_on_linux
 
   inputs:
     - hostname:
@@ -88,7 +88,7 @@ flow:
   workflow:
     - check_postgress_is_running:
         do:
-           postgres.server.redhat.run_pg_ctl_command:
+           postgres.server.linux.run_pg_ctl_command:
               - operation: 'status'
               - installation_location
               - pg_ctl_location
@@ -134,7 +134,7 @@ flow:
               - timeout: ${execution_timeout}
               - private_key_file
               - command: >
-                  ${psql_command}
+                  ${'sudo -i -u postgres ' + psql_command}
         publish:
             - return_code
             - return_result

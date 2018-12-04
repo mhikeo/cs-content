@@ -40,7 +40,7 @@
 #! @result FAILURE: There was an error
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.postgresql.server.redhat
+namespace: io.cloudslang.postgresql.server.linux
 
 imports:
   base: io.cloudslang.base.cmd
@@ -77,7 +77,7 @@ flow:
       - private_key_file:
           required: false
       - exec_command:
-         default: ${'sudo -i -u postgres ' + pg_ctl_location + '/pg_ctl -s -D ' + installation_location + ' ' + operation}
+         default: ${'sudo -i -u postgres ' + pg_ctl_location + '/pg_ctl -s -D ' + installation_location + '/data ' + operation}
          private: true
   workflow:
      - is_required_out_redirect:

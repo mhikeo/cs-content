@@ -51,7 +51,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server
+namespace: io.cloudslang.postgresql.server.linux
 
 imports:
   ssh: io.cloudslang.base.ssh
@@ -63,7 +63,7 @@ imports:
   postgres: io.cloudslang.postgresql
 
 flow:
-  name: install_postgres_on_redhat
+  name: install_postgres_on_linux
 
   inputs:
     - hostname:
@@ -101,7 +101,7 @@ flow:
   workflow:
     - derive_postgres_version:
         do:
-          postgres.server.redhat.derive_postgres_version:
+          postgres.server.linux.derive_postgres_version:
             - service_name
         publish:
           - pkg_name

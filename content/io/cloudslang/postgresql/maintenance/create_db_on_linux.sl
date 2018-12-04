@@ -66,7 +66,7 @@ imports:
   lists: io.cloudslang.base.lists
 
 flow:
-  name: create_db_on_redhat
+  name: create_db_on_linux
 
   inputs:
     - hostname:
@@ -114,7 +114,7 @@ flow:
   workflow:
       - check_postgress_is_running:
           do:
-             postgres.server.redhat.run_pg_ctl_command:
+             postgres.server.linux.run_pg_ctl_command:
                 - operation: 'status'
                 - installation_location
                 - pg_ctl_location
@@ -165,7 +165,7 @@ flow:
                 - timeout: ${execution_timeout}
                 - private_key_file
                 - command: >
-                    ${psql_command}
+                    ${'sudo -i -u postgres ' + psql_command}
           publish:
               - return_code
               - return_result
@@ -180,9 +180,8 @@ flow:
   outputs:
     - return_result
     - exception
+    - psql_command
     - return_code :  ${"0" if exception == '' else "-1"}
   results:
     - SUCCESS
     - FAILURE
-
-
