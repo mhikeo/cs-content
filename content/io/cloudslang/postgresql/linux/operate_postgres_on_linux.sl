@@ -44,7 +44,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server
+namespace: io.cloudslang.postgresql.linux
 
 imports:
   base: io.cloudslang.base.cmd
@@ -58,7 +58,7 @@ imports:
   postgres: io.cloudslang.postgresql
 
 flow:
-  name: operate_postgres_on_redhat
+  name: operate_postgres_on_linux
 
   inputs:
     - hostname:
@@ -82,7 +82,7 @@ flow:
     - execution_timeout:
         default: '90000'
     - installation_location:
-        default: '/var/lib/pgsql/10/data'
+        default: '/var/lib/pgsql/10'
     - operation:
         required: false
     - start_on_boot:
@@ -96,8 +96,8 @@ flow:
   workflow:
     - derive_postgres_version:
         do:
-          postgres.server.redhat.derive_service_name_from_installation_location:
-            - installation_location : ${installation_location}
+          postgres.linux.utils.derive_service_name_from_installation_location:
+            - installation_location : ${installation_location + '/data'}
         publish:
           - service_name
         navigate:
@@ -117,7 +117,7 @@ flow:
             - timeout: ${execution_timeout}
             - connect_timeout: ${connection_timeout}
             - command: >
-                ${'sudo -u postgres [ -d ' + installation_location + ' ] && echo "true" || echo "Installation location was not found"'}
+                ${'sudo -u postgres [ -d ' + installation_location + '/data ] && echo "true" || echo "Installation location was not found"'}
         publish:
           - is_installation_found: ${standard_out}
           - exception: ${'' if 'true' in standard_out else return_result}
@@ -144,7 +144,7 @@ flow:
 
     - run_command:
        do:
-          postgres.server.redhat.run_pg_ctl_command:
+          postgres.linux.utils.run_pg_ctl_command:
             - operation
             - installation_location
             - pg_ctl_location

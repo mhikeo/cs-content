@@ -26,7 +26,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.configuration.common
+namespace: io.cloudslang.postgresql.common
 
 operation:
   name: update_postgres_config

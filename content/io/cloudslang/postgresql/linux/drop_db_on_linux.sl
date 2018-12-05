@@ -41,7 +41,7 @@
 #! @result FAILURE: error
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.postgresql.maintenance
+namespace: io.cloudslang.postgresql.linux
 
 imports:
   base: io.cloudslang.base.cmd
@@ -52,7 +52,7 @@ imports:
   print: io.cloudslang.base.print
 
 flow:
-  name: drop_db_on_redhat
+  name: drop_db_on_linux
 
   inputs:
     - hostname:
@@ -88,7 +88,7 @@ flow:
   workflow:
     - check_postgress_is_running:
         do:
-           postgres.server.redhat.run_pg_ctl_command:
+           postgres.linux.utils.run_pg_ctl_command:
               - operation: 'status'
               - installation_location
               - pg_ctl_location
@@ -110,7 +110,7 @@ flow:
 
     - build_dropdb_command:
         do:
-           postgres.maintenance.commands.dropdb_command:
+           postgres.common.dropdb_command:
               - db_name
               - db_echo
               - db_username: 'postgres'
@@ -134,7 +134,7 @@ flow:
               - timeout: ${execution_timeout}
               - private_key_file
               - command: >
-                  ${psql_command}
+                  ${'sudo -i -u postgres ' + psql_command}
         publish:
             - return_code
             - return_result

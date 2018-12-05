@@ -1,9 +1,14 @@
 ########################################################################################################################
 #!!
-#! @description: Create a postgresql database on machines that are running
-#!               Red Hat based linux
+#! @description: Create a postgresql database on machines that are running on Windows
 #!
 #! @input hostname: Hostname or IP address of the target machine
+#! @input hostname_port: The WinRM service port
+#!              Default: '5985'
+#!              Optional
+#! @input hostname_protocol: The WinRM service protocol
+#!              Default: 'http'
+#!              Optional
 #! @input username: Username used to connect to the target machine
 #! @input password: The root or priviledged account password
 #! @input proxy_host: The proxy server used to access the remote machine
@@ -16,16 +21,14 @@
 #!                        Optional
 #! @input proxy_password: The proxy server password associated with the proxy_username input value
 #!                        Optional
-#! @input connection_timeout: Time in milliseconds to wait for the connection to be made
-#!                            Default value: '10000'
-#!                            Optional
-#! @input execution_timeout: Time in milliseconds to wait for the command to complete
-#!                           Default: '90000'
+#! @input execution_timeout: Time in seconds to wait for the command to complete
+#!                           Default: '90'
 #!                           Optional
-#! @input installation_location: The postgresql installation location
-#!                           Default: '/var/lib/pgsql/10'
-#! @input pg_ctl_location: Path of the pg_ctl binary
-#!                         Default: '/usr/pgsql-10/bin'
+#! @input installation_location: The full path to the location where PostgreSQL was installed.
+#!                               Default: 'C:\\Program Files\\PostgreSQL\\10.6'
+#!                               Optional
+#! @input service_name: The service name
+#!                      Default: 'postgresql'
 #! @input db_name: Specifies the name of the database to be created.
 #!                 The default is to create a database with the same name as the current system user ('postgres')
 #!                 Default: 'postgres'
@@ -45,8 +48,6 @@
 #! @input db_echo: Echo the commands that createddb generates and sends to the server
 #!                 Valid values: 'true', 'false'
 #!                 Default value: 'true'
-#! @input private_key_file: Absolute path to private key file
-#!                          Optional
 #!
 #! @output return_result: STDOUT of the remote machine in case of success or the cause of the error in case of exception
 #! @output return_code: '0' if success, '-1' otherwise
@@ -56,21 +57,27 @@
 #! @result FAILURE: error
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.postgresql.maintenance
+namespace: io.cloudslang.postgresql.windows
 
 imports:
   base: io.cloudslang.base.cmd
   ssh: io.cloudslang.base.ssh
   strings: io.cloudslang.base.strings
   postgres: io.cloudslang.postgresql
-  lists: io.cloudslang.base.lists
+  scripts: io.cloudslang.base.powershell
 
 flow:
-  name: create_db_on_redhat
+  name: create_db_on_windows
 
   inputs:
     - hostname:
         required: true
+    - hostname_port:
+        default: '5985'
+        required: false
+    - hostname_protocol:
+        default: 'http'
+        required: false
     - username:
         sensitive: true
     - password:
@@ -85,14 +92,12 @@ flow:
         required: false
     - proxy_password:
         required: false
-    - connection_timeout:
-        default: '10000'
     - execution_timeout:
-        default: '90000'
+        default: '90'
     - installation_location:
-        default: '/var/lib/pgsql/10'
-    - pg_ctl_location:
-        default: '/usr/pgsql-10/bin'
+        default: 'C:\\Program Files\\PostgreSQL\\10.6'
+    - service_name:
+        default: 'postgresql'
     - db_name:
         default: 'postgres'
     - db_description:
@@ -109,80 +114,97 @@ flow:
         required: false
     - db_echo:
         default: 'true'
-    - private_key_file:
-        required: false
   workflow:
       - check_postgress_is_running:
           do:
-             postgres.server.redhat.run_pg_ctl_command:
+             postgres.windows.utils.get_system_service_command:
+                - service_name: ${service_name}
                 - operation: 'status'
-                - installation_location
-                - pg_ctl_location
+          publish:
+             - pwsh_command
+             - exception
+             - return_code
+             - return_result
+          navigate:
+            - SUCCESS: get_postgresql_service_user
+            - FAILURE: FAILURE
+
+      - get_postgresql_service_user:
+          do:
+             postgres.windows.utils.get_system_service_user:
+                - service_name
                 - hostname
+                - hostname_port
+                - hostname_protocol
                 - username
+                - password
+                - execution_timeout
                 - proxy_host
                 - proxy_port
                 - proxy_username
                 - proxy_password
-                - connection_timeout
-                - execution_timeout
-                - private_key_file
           publish:
-              - return_result
-              - error_message
-              - exception
-              - return_code
-              - standard_err
+             - service_user
+             - exception
+             - return_code
+             - return_result
+             - stderr
+
+      - is_postgres_service_user_found:
+           do:
+              strings.string_equals:
+                - first_string: ''
+                - second_string: ${service_user}
+           navigate:
+             - SUCCESS: FAILURE
+             - FAILURE: build_createdb_command
+
       - build_createdb_command:
-         do:
-            postgres.maintenance.commands.createdb_command:
+           do:
+              postgres.common.createdb_command:
                 - db_name
                 - db_description
                 - db_tablespace
                 - db_encoding
                 - db_locale
-                - db_owner
+                - db_owner: ${db_owner if db_owner is not None and db_owner !=''  else service_user}
                 - db_template
                 - db_echo
-                - db_username: 'postgres'
-         publish:
-           - psql_command
-         navigate:
-            - SUCCESS: create_database
+                - db_username: ${service_user}
+           publish:
+              - psql_command
+           navigate:
+              - SUCCESS: create_database
 
       - create_database:
-          do:
-             ssh.ssh_flow:
-                - host: ${hostname}
-                - port: '22'
-                - username
-                - password
-                - proxy_host
-                - proxy_port
-                - proxy_username
-                - proxy_password
-                - connect_timeout: ${connection_timeout}
-                - timeout: ${execution_timeout}
-                - private_key_file
-                - command: >
-                    ${psql_command}
-          publish:
-              - return_code
-              - return_result
-              - exception: ${standard_err}
-
-      - check_result:
-          do:
-            strings.string_equals:
-              - first_string: ${exception}
-              - second_string: ${''}
+         do:
+            scripts.powershell_script:
+              - host: ${hostname}
+              - port: ${hostname_port}
+              - protocol: ${hostname_protocol}
+              - username
+              - password
+              - proxy_host
+              - proxy_port
+              - proxy_username
+              - proxy_password
+              - operation_timeout: ${execution_timeout}
+              - script: >
+                  ${ 'Set-Location -Path \"' + installation_location+'\\\\bin\"; .\\' + psql_command}
+         publish:
+            - return_code: ${script_exit_code}
+            - script_exit_code
+            - return_result
+            - stderr
+            - exception: ${'' if get('script_exit_code','') == "0" else stderr}
+         navigate:
+            - SUCCESS: SUCCESS
+            - FAILURE: FAILURE
 
   outputs:
     - return_result
     - exception
-    - return_code :  ${"0" if exception == '' else "-1"}
+    - return_code
   results:
     - SUCCESS
     - FAILURE
-
-

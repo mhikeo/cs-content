@@ -79,7 +79,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.configuration
+namespace: io.cloudslang.postgresql.windows
 
 imports:
   scripts: io.cloudslang.base.powershell
@@ -90,7 +90,7 @@ imports:
   rft: io.cloudslang.base.remote_file_transfer
   fs: io.cloudslang.base.filesystem
   postgres: io.cloudslang.postgresql
-  postgres_configuration: io.cloudslang.postgresql.configuration
+
 flow:
   name: configure_postgres_on_windows
 
@@ -155,7 +155,7 @@ flow:
         default: 'no'
         required: false
     - private_key_file:
-        required: false
+        required: true
     - temp_local_dir:
         default: '/tmp'
         required: false
@@ -300,7 +300,7 @@ flow:
         do:
            cmd.run_command:
                - command: >
-                  ${'scp -i ' + private_key_file + ' \"' + configuration_file + '\" ' + username + '@'+ hostname+':/C:/Users/'+username+'/tmp'}
+                  ${'scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET -i ' + private_key_file + ' \"' + configuration_file + '\" ' + username + '@'+ hostname+':/C:/Users/'+username+'/tmp'}
         publish:
              - return_result: ''
              - exception: ${error_message}
@@ -361,8 +361,8 @@ flow:
         do:
            cmd.run_command:
              - command: >
-                ${'scp -i ' + private_key_file +' ' + username + '@'+ hostname +':/C:/Users/'+ username+'/tmp/postgresql.conf \"' + temp_local_dir + '\"'
-                ' && scp -i ' + private_key_file +' ' +  username + '@'+ hostname + ':/C:/Users/' + username +'/tmp/pg_hba.conf \"' + temp_local_dir +'\"'}
+                ${'scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET -i ' + private_key_file +' ' + username + '@'+ hostname +':/C:/Users/'+ username+'/tmp/postgresql.conf \"' + temp_local_dir + '\"'
+                ' && scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET -i ' + private_key_file +' ' +  username + '@'+ hostname + ':/C:/Users/' + username +'/tmp/pg_hba.conf \"' + temp_local_dir +'\"'}
         publish:
           - exception : ${error_message}
           - return_code
@@ -372,7 +372,7 @@ flow:
 
     - update_postgresql_conf:
         do:
-           postgres.configuration.common.update_postgres_config:
+           postgres.common.update_postgres_config:
              - file_path: ${temp_local_dir + '/postgresql.conf'}
              - listen_addresses: ${listen_addresses}
              - port: ${port}
@@ -398,7 +398,7 @@ flow:
         do:
            cmd.run_command:
              - command: >
-                ${'scp -i ' + private_key_file + ' \"' + temp_local_dir + '/postgresql.conf\" ' + username + '@'+ hostname + ':/C:/Users/'+username+'/tmp'}
+                ${'scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET -i ' + private_key_file + ' \"' + temp_local_dir + '/postgresql.conf\" ' + username + '@'+ hostname + ':/C:/Users/'+username+'/tmp'}
         publish:
           - exception : ${error_message}
           - return_code
@@ -408,7 +408,7 @@ flow:
 
     - update_pg_hba_conf:
         do:
-           postgres.configuration.common.update_pg_hba_config:
+           postgres.common.update_pg_hba_config:
               - file_path: ${temp_local_dir + '/pg_hba.conf'}
               - allowed_hosts: ${allowed_hosts}
               - allowed_users: ${allowed_users}
@@ -424,7 +424,7 @@ flow:
         do:
            cmd.run_command:
              - command: >
-                 ${'scp -i ' + private_key_file + ' \"' + temp_local_dir + '/pg_hba.conf\" ' + username + '@'+ hostname + ':/C:/Users/'+username+'/tmp'}
+                 ${'scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET -i ' + private_key_file + ' \"' + temp_local_dir + '/pg_hba.conf\" ' + username + '@'+ hostname + ':/C:/Users/'+username+'/tmp'}
         publish:
           - exception : ${error_message}
           - return_code

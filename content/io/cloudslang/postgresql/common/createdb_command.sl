@@ -31,7 +31,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.maintenance.commands
+namespace: io.cloudslang.postgresql.common
 
 operation:
   name: createdb_command
@@ -80,4 +80,3 @@ operation:
     - psql_command: ${result}
   results:
     - SUCCESS
-

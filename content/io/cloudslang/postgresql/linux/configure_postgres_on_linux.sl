@@ -74,7 +74,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.configuration
+namespace: io.cloudslang.postgresql.linux
 
 imports:
   base: io.cloudslang.base.cmd
@@ -88,7 +88,7 @@ imports:
   postgres: io.cloudslang.postgresql
 
 flow:
-  name: configure_postgres_on_redhat
+  name: configure_postgres_on_linux
 
   inputs:
     - hostname:
@@ -138,11 +138,11 @@ flow:
     - configuration_file:
         required: false
     - allowed_hosts:
-        required: false
+        required: true
     - allowed_users:
-        required: false
+        required: true
     - installation_location:
-        default: '/var/lib/pgsql/10/data'
+        default: '/var/lib/pgsql/10'
     - reboot:
         default: 'no'
         required: false
@@ -170,7 +170,7 @@ flow:
             - timeout: ${execution_timeout}
             - connect_timeout: ${connection_timeout}
             - command: >
-                ${'sudo -u postgres [ -d ' + installation_location + ' ] && echo "true" || echo "false"'}
+                ${'sudo -u postgres [ -d ' + installation_location + '/data ] && echo "true" || echo "false"'}
         publish:
           - standard_out
           - return_code
@@ -210,7 +210,7 @@ flow:
               - timeout: ${execution_timeout}
               - connect_timeout: ${connection_timeout}
               - command: >
-                  ${'sudo cp -a '+ installation_location  +'/postgresql.conf /home/'+ username +'/  && sudo chmod 777 '+ '/home/' + username +'/postgresql.conf && sudo cp -a '+ installation_location  +'/pg_hba.conf /home/'+ username +'/  && sudo chmod 777 '+ '/home/' + username +'/pg_hba.conf' }
+                  ${'mkdir -p ~/temp && sudo cp -a '+ installation_location  +'/data/postgresql.conf ~/temp  && sudo chmod 777 '+ '~/temp/postgresql.conf && sudo cp -a '+ installation_location  +'/data/pg_hba.conf ~/temp && sudo chmod 777 '+ '~/temp/pg_hba.conf' }
           publish:
             - return_result
             - standard_err
@@ -225,7 +225,7 @@ flow:
         do:
            base.run_command:
             - command: >
-                ${'scp -i ' + private_key_file + ' ' + username+ '@'+ hostname+':*.conf ' + temp_local_folder}
+                ${'scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET -i ' + private_key_file + ' ' + username+ '@'+ hostname+':~/temp/*.conf ' + temp_local_folder}
         publish:
             - return_result
             - return_code
@@ -238,7 +238,7 @@ flow:
         do:
            base.run_command:
             - command: >
-                ${'scp -i ' + private_key_file + ' ' + configuration_file +' ' + username+ '@'+ hostname+':~'}
+                ${'scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET -i ' + private_key_file + ' ' + configuration_file +' ' + username+ '@'+ hostname+':~/temp'}
         publish:
             - return_result: ${error_message}
             - return_code
@@ -248,7 +248,7 @@ flow:
 
     - update_postgres_conf:
         do:
-           postgres.configuration.common.update_postgres_config:
+           postgres.common.update_postgres_config:
              - file_path: ${temp_local_folder + '/postgresql.conf'}
              - listen_addresses: ${listen_addresses}
              - port: ${port}
@@ -273,7 +273,7 @@ flow:
 
     - update_pg_hba_config:
         do:
-           postgres.configuration.common.update_pg_hba_config:
+           postgres.common.update_pg_hba_config:
               - file_path: ${temp_local_folder + '/pg_hba.conf'}
               - allowed_hosts: ${allowed_hosts}
               - allowed_users: ${allowed_users}
@@ -290,7 +290,7 @@ flow:
         do:
            base.run_command:
             - command: >
-               ${'scp -i ' + private_key_file + ' ' + temp_local_folder+'/postgresql.conf ' + username+ '@'+ hostname+':~ && scp  -i ' + private_key_file + ' '+ temp_local_folder + '/pg_hba.conf ' + username+ '@'+ hostname+':~'}
+               ${'scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET -i ' + private_key_file + ' ' + temp_local_folder+'/postgresql.conf ' + username+ '@'+ hostname+':~/temp && scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET -i ' + private_key_file + ' '+ temp_local_folder + '/pg_hba.conf ' + username+ '@'+ hostname+':~/temp'}
         publish:
             - return_result : ${error_message}
             - return_code
@@ -312,7 +312,7 @@ flow:
            - timeout: ${execution_timeout}
            - connect_timeout: ${connection_timeout}
            - command: >
-               ${'sudo chgrp postgres /home/' + username +'/*.conf  && sudo chown postgres /home/' + username +'/*.conf  && sudo chmod 600 /home/' + username +'/*.conf && sudo mv -f /home/'+ username + '/*.conf ' + installation_location }
+               ${'sudo chgrp postgres ~/temp/*.conf  && sudo chown postgres ~/temp/*.conf  && sudo chmod 600 ~/temp/*.conf && sudo mv -f ~/temp/*.conf ' + installation_location + '/data' }
        publish:
          - return_result: ${standard_err}
          - return_code
@@ -373,7 +373,7 @@ flow:
            - timeout: ${execution_timeout}
            - connect_timeout: ${connection_timeout}
            - command: >
-               ${'sudo -i -u postgres '+ pg_ctl_location + '/pg_ctl -s -D '+ installation_location  +' restart > /dev/null'}
+               ${'sudo -i -u postgres '+ pg_ctl_location + '/pg_ctl -s -D ' + installation_location  + '/data restart > /dev/null'}
        publish:
          - return_result
          - standard_err
