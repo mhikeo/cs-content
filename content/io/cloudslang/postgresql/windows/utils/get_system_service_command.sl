@@ -15,7 +15,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.windows
+namespace: io.cloudslang.postgresql.windows.utils
 
 operation:
   name: get_system_service_command

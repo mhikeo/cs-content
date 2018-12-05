@@ -114,7 +114,7 @@ flow:
   workflow:
       - check_postgress_is_running:
           do:
-             postgres.linux.run_pg_ctl_command:
+             postgres.linux.utils.run_pg_ctl_command:
                 - operation: 'status'
                 - installation_location
                 - pg_ctl_location

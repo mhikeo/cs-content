@@ -117,7 +117,7 @@ flow:
   workflow:
       - check_postgress_is_running:
           do:
-             postgres.windows.get_system_service_command:
+             postgres.windows.utils.get_system_service_command:
                 - service_name: ${service_name}
                 - operation: 'status'
           publish:
@@ -131,7 +131,7 @@ flow:
 
       - get_postgresql_service_user:
           do:
-             postgres.windows.get_system_service_user:
+             postgres.windows.utils.get_system_service_user:
                 - service_name
                 - hostname
                 - hostname_port

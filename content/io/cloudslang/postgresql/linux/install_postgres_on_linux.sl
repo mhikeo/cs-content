@@ -101,7 +101,7 @@ flow:
   workflow:
     - derive_postgres_version:
         do:
-          postgres.linux.derive_postgres_version:
+          postgres.linux.utils.derive_postgres_version:
             - service_name
         publish:
           - pkg_name

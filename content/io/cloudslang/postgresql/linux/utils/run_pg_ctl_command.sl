@@ -40,7 +40,7 @@
 #! @result FAILURE: There was an error
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.postgresql.linux
+namespace: io.cloudslang.postgresql.linux.utils
 
 imports:
   base: io.cloudslang.base.cmd

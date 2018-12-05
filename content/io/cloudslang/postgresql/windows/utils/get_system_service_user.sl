@@ -39,7 +39,7 @@
 #! @result FAILURE: error
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.postgresql.windows
+namespace: io.cloudslang.postgresql.windows.utils
 
 imports:
   base: io.cloudslang.base.cmd

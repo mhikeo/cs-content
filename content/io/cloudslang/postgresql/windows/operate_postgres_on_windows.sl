@@ -157,7 +157,7 @@ flow:
 
     - get_pwsh_command_by_operation_name:
         do:
-          postgres.windows.get_system_service_command:
+          postgres.windows.utils.get_system_service_command:
              - service_name: ${service_name}
              - operation: ${operation}
         publish:
