@@ -83,7 +83,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server
+namespace: io.cloudslang.postgresql.server.windows
 
 imports:
   scripts: io.cloudslang.base.powershell
@@ -233,7 +233,7 @@ flow:
   outputs:
     -  return_code
     -  return_result
-    -  stderr
+    -  exception: ${stderr}
 
   results:
     - SUCCESS

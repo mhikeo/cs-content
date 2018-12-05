@@ -48,7 +48,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server
+namespace: io.cloudslang.postgresql.server.windows
 
 imports:
   base: io.cloudslang.base.cmd

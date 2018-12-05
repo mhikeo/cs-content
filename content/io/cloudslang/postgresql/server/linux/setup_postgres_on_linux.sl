@@ -256,10 +256,10 @@ flow:
           - return_code
           - exception
         navigate:
-          - SUCCESS: stop_database
+          - SUCCESS: stop_postgres
           - FAILURE: FAILURE
 
-    - stop_database:
+    - stop_postgres:
         do:
           postgres.server.linux.operate_postgres_on_linux:
             - hostname
@@ -282,10 +282,10 @@ flow:
           - return_code
           - exception
         navigate:
-          - SUCCESS: start_database
+          - SUCCESS: start_postgres
           - FAILURE: FAILURE
 
-    - start_database:
+    - start_postgres:
         do:
           postgres.server.linux.operate_postgres_on_linux:
             - hostname
@@ -308,10 +308,10 @@ flow:
           - return_code
           - exception
         navigate:
-          - SUCCESS: restart_database
+          - SUCCESS: restart_postgres
           - FAILURE: FAILURE
 
-    - restart_database:
+    - restart_postgres:
         do:
           postgres.server.linux.operate_postgres_on_linux:
             - hostname
