@@ -16,6 +16,8 @@ flow:
         default: ''
         required: false
         sensitive: true
+    - private_key_file:
+        required: false
     - proxy_host:
         required: false
     - proxy_port:
@@ -62,8 +64,6 @@ flow:
         default: '/var/lib/pgsql/10/data'
     - reboot:
         default: 'no'
-    - private_key_file:
-        required: false
     - temp_local_folder:
         default: '/tmp'
         required: false
@@ -119,7 +119,7 @@ flow:
               - effective_cache_size
               - autovacuum
               - work_mem
-           #   - configuration_file
+              - configuration_file
               - allowed_hosts
               - allowed_users
               - installation_location
@@ -158,14 +158,14 @@ flow:
               - timeout: ${execution_timeout}
               - private_key_file
               - command: >
-                  ${'sudo su - postgres -c \"psql -A -t -c \\\"'+ sql_query +'"'}
+                  ${'sudo su - postgres -c \"psql -A -t -c \\\"'+ sql_query +'\\\"\"'}
         publish:
             - return_code
             - return_result
             - exception: ${standard_err}
 
   outputs:
-    - return_result
+    - return_result: ${return_result.strip()}
     - exception
     - return_code
   results:

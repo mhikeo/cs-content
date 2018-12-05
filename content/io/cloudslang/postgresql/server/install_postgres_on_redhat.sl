@@ -235,6 +235,7 @@ flow:
           - standard_out
           - return_code
           - command_return_code
+          - exception: ${standard_err}
         navigate:
           - SUCCESS: install_server_packages
           - FAILURE: check_rpm_install_error

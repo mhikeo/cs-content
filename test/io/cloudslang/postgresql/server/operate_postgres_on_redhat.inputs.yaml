@@ -2,7 +2,7 @@ testOperatePostgresWithUnrecognizedOperationRedhatSUCCESS:
   testSuites: [postgresql,postgresql-server]
   testFlowPath: io.cloudslang.postgresql.server.test_operate_postgres_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - operation: 'unrecognized-operation'
     - private_key_file: './rhel-psql-aws.pem'
@@ -17,7 +17,7 @@ testOperatePostgresWithOperationStopRedhatSuccess:
   testSuites: [postgresql,postgresql-server]
   testFlowPath: io.cloudslang.postgresql.server.test_operate_postgres_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - operation: 'stop'
     - private_key_file: './rhel-psql-aws.pem'
@@ -36,7 +36,7 @@ testOperatePostgresWithOperationRestartRedhatSuccess:
   testSuites: [postgresql,postgresql-server]
   testFlowPath: io.cloudslang.postgresql.server.test_operate_postgres_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - operation: 'restart'
     - private_key_file: './rhel-psql-aws.pem'
@@ -54,7 +54,7 @@ testOperatePostgresWithOperationReloadRedhatSuccess:
   testSuites: [postgresql,postgresql-server]
   testFlowPath: io.cloudslang.postgresql.server.test_operate_postgres_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - operation: 'reload'
     - private_key_file: './rhel-psql-aws.pem'
@@ -72,7 +72,7 @@ testOperatePostgresWithEnableOnBootRedhatSUCCESS:
   testSuites: [postgresql,postgresql-server]
   testFlowPath: io.cloudslang.postgresql.server.test_operate_postgres_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - start_on_boot: 'true'
     - private_key_file: './rhel-psql-aws.pem'
@@ -85,7 +85,7 @@ testOperatePostgresWithDisableOnBootRedhatSUCCESS:
   testSuites: [postgresql,postgresql-server]
   testFlowPath: io.cloudslang.postgresql.server.test_operate_postgres_on_redhat
   inputs:
-    - hostname: 'ec2-54-89-176-233.compute-1.amazonaws.com'
+    - hostname: 'ec2-107-21-171-41.compute-1.amazonaws.com'
     - username: 'ec2-user'
     - start_on_boot: 'false'
     - private_key_file: './rhel-psql-aws.pem'

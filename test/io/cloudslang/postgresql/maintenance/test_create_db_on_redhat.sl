@@ -50,7 +50,7 @@ flow:
     - db_echo:
         default: 'true'
     - private_key_file:
-        required: true
+        required: false
   workflow:
     - check_host_prereqeust:
          do:
