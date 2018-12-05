@@ -74,7 +74,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.configuration
+namespace: io.cloudslang.postgresql.linux
 
 imports:
   base: io.cloudslang.base.cmd
@@ -248,7 +248,7 @@ flow:
 
     - update_postgres_conf:
         do:
-           postgres.configuration.common.update_postgres_config:
+           postgres.common.update_postgres_config:
              - file_path: ${temp_local_folder + '/postgresql.conf'}
              - listen_addresses: ${listen_addresses}
              - port: ${port}
@@ -273,7 +273,7 @@ flow:
 
     - update_pg_hba_config:
         do:
-           postgres.configuration.common.update_pg_hba_config:
+           postgres.common.update_pg_hba_config:
               - file_path: ${temp_local_folder + '/pg_hba.conf'}
               - allowed_hosts: ${allowed_hosts}
               - allowed_users: ${allowed_users}

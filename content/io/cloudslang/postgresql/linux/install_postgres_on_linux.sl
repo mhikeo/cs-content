@@ -51,7 +51,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server.linux
+namespace: io.cloudslang.postgresql.linux
 
 imports:
   ssh: io.cloudslang.base.ssh
@@ -101,7 +101,7 @@ flow:
   workflow:
     - derive_postgres_version:
         do:
-          postgres.server.linux.derive_postgres_version:
+          postgres.linux.derive_postgres_version:
             - service_name
         publish:
           - pkg_name

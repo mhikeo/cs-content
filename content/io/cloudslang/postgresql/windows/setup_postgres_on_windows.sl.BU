@@ -255,6 +255,77 @@ flow:
           - DOWNLOAD_INSTALLER_MODULE_FAILURE: FAILURE
           - POSTGRES_INSTALL_PACKAGE_FAILURE: FAILURE
 
+    # - configure_postgres:
+    #     do:
+    #       postgres.configuration.configure_postgres_on_windows:
+    #         - hostname
+    #         - hostname_port: ${port}
+    #         - hostname_protocol: ${protocol}
+    #         - username
+    #         - password
+    #         - proxy_host
+    #         - proxy_port
+    #         - proxy_username
+    #         - proxy_password
+    #         - execution_timeout
+    #         - listen_addresses
+    #         - port: ${server_port}
+    #         - ssl
+    #         - ssl_ca_file
+    #         - ssl_cert_file
+    #         - ssl_key_file
+    #         - max_connections
+    #         - shared_buffers
+    #         - effective_cache_size
+    #         - autovacuum
+    #         - work_mem
+    #         - configuration_file
+    #         - allowed_hosts
+    #         - allowed_users
+    #         - installation_location
+    #         - data_dir
+    #         - reboot
+    #         - private_key_file
+    #         - temp_local_dir
+    #     publish:
+    #       - return_result
+    #       - return_code
+    #       - exception
+    #     navigate:
+    #       - SUCCESS: SUCCESS
+    #       - FAILURE: FAILURE
+
+    # - create_database:
+    #     do:
+    #       postgres.maintenance.create_db_on_windows:
+    #         - hostname
+    #         - hostname_port: ${port}
+    #         - hostname_protocol: ${protocol}
+    #         - username
+    #         - password
+    #         - proxy_host
+    #         - proxy_port
+    #         - proxy_username
+    #         - proxy_password
+    #         - execution_timeout
+    #         - installation_location
+    #         - service_name
+    #         - db_name
+    #         - db_description
+    #         - db_tablespace
+    #         - db_encoding
+    #         - db_locale
+    #         - db_owner
+    #         - db_template
+    #         - db_echo
+    #     publish:
+    #       - return_result
+    #       - return_code
+    #       - exception
+    #     navigate:
+    #       - SUCCESS: stop_postgres
+    #       - FAILURE: FAILURE
+
     - stop_postgres:
         do:
           postgres.server.windows.operate_postgres_on_windows:
@@ -335,6 +406,31 @@ flow:
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: FAILURE
+
+    # - drop_database:
+    #     do:
+    #       postgres.maintenance.drop_db_on_windows:
+    #         - hostname
+    #         - hostname_port: ${port}
+    #         - hostname_protocol: ${protocol}
+    #         - username
+    #         - password
+    #         - proxy_host
+    #         - proxy_port
+    #         - proxy_username
+    #         - proxy_password
+    #         - execution_timeout
+    #         - installation_location
+    #         - service_name
+    #         - db_name
+    #         - db_echo
+    #     publish:
+    #       - return_result
+    #       - return_code
+    #       - exception
+    #     navigate:
+    #       - SUCCESS: SUCCESS
+    #       - FAILURE: FAILURE
 
   outputs:
     -  return_code

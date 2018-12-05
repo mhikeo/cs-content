@@ -48,7 +48,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server.windows
+namespace: io.cloudslang.postgresql.windows
 
 imports:
   base: io.cloudslang.base.cmd
@@ -157,7 +157,7 @@ flow:
 
     - get_pwsh_command_by_operation_name:
         do:
-          postgres.server.windows.get_system_service_command:
+          postgres.windows.get_system_service_command:
              - service_name: ${service_name}
              - operation: ${operation}
         publish:

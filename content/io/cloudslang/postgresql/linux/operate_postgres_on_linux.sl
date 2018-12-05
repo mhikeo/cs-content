@@ -44,7 +44,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server.linux
+namespace: io.cloudslang.postgresql.linux
 
 imports:
   base: io.cloudslang.base.cmd
@@ -96,7 +96,7 @@ flow:
   workflow:
     - derive_postgres_version:
         do:
-          postgres.server.linux.derive_service_name_from_installation_location:
+          postgres.linux.derive_service_name_from_installation_location:
             - installation_location : ${installation_location + '/data'}
         publish:
           - service_name
@@ -144,7 +144,7 @@ flow:
 
     - run_command:
        do:
-          postgres.server.linux.run_pg_ctl_command:
+          postgres.linux.run_pg_ctl_command:
             - operation
             - installation_location
             - pg_ctl_location

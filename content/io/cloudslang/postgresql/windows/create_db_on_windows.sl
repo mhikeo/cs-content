@@ -57,7 +57,7 @@
 #! @result FAILURE: error
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.postgresql.maintenance
+namespace: io.cloudslang.postgresql.windows
 
 imports:
   base: io.cloudslang.base.cmd
@@ -117,7 +117,7 @@ flow:
   workflow:
       - check_postgress_is_running:
           do:
-             postgres.server.windows.get_system_service_command:
+             postgres.windows.get_system_service_command:
                 - service_name: ${service_name}
                 - operation: 'status'
           publish:
@@ -131,7 +131,7 @@ flow:
 
       - get_postgresql_service_user:
           do:
-             postgres.server.windows.get_system_service_user:
+             postgres.windows.get_system_service_user:
                 - service_name
                 - hostname
                 - hostname_port
@@ -161,7 +161,7 @@ flow:
 
       - build_createdb_command:
            do:
-              postgres.maintenance.commands.createdb_command:
+              postgres.common.createdb_command:
                 - db_name
                 - db_description
                 - db_tablespace
@@ -208,5 +208,3 @@ flow:
   results:
     - SUCCESS
     - FAILURE
-
-

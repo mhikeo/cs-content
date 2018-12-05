@@ -56,7 +56,7 @@
 #! @result FAILURE: error
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.postgresql.maintenance
+namespace: io.cloudslang.postgresql.linux
 
 imports:
   base: io.cloudslang.base.cmd
@@ -114,7 +114,7 @@ flow:
   workflow:
       - check_postgress_is_running:
           do:
-             postgres.server.linux.run_pg_ctl_command:
+             postgres.linux.run_pg_ctl_command:
                 - operation: 'status'
                 - installation_location
                 - pg_ctl_location
@@ -135,7 +135,7 @@ flow:
               - standard_err
       - build_createdb_command:
          do:
-            postgres.maintenance.commands.createdb_command:
+            postgres.common.createdb_command:
                 - db_name
                 - db_description
                 - db_tablespace

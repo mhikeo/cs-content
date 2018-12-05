@@ -39,13 +39,12 @@
 #! @result FAILURE: error
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.postgresql.server.windows
+namespace: io.cloudslang.postgresql.windows
 
 imports:
   base: io.cloudslang.base.cmd
   ssh: io.cloudslang.base.ssh
   strings: io.cloudslang.base.strings
-  postgres: io.cloudslang.postgresql
   scripts: io.cloudslang.base.powershell
 
 flow:

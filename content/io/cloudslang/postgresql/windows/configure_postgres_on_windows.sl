@@ -79,7 +79,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.configuration
+namespace: io.cloudslang.postgresql.windows
 
 imports:
   scripts: io.cloudslang.base.powershell
@@ -90,7 +90,7 @@ imports:
   rft: io.cloudslang.base.remote_file_transfer
   fs: io.cloudslang.base.filesystem
   postgres: io.cloudslang.postgresql
-  postgres_configuration: io.cloudslang.postgresql.configuration
+
 flow:
   name: configure_postgres_on_windows
 
@@ -372,7 +372,7 @@ flow:
 
     - update_postgresql_conf:
         do:
-           postgres.configuration.common.update_postgres_config:
+           postgres.common.update_postgres_config:
              - file_path: ${temp_local_dir + '/postgresql.conf'}
              - listen_addresses: ${listen_addresses}
              - port: ${port}
@@ -408,7 +408,7 @@ flow:
 
     - update_pg_hba_conf:
         do:
-           postgres.configuration.common.update_pg_hba_config:
+           postgres.common.update_pg_hba_config:
               - file_path: ${temp_local_dir + '/pg_hba.conf'}
               - allowed_hosts: ${allowed_hosts}
               - allowed_users: ${allowed_users}

@@ -12,7 +12,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server.linux
+namespace: io.cloudslang.postgresql.linux
 
 operation:
   name: derive_postgres_version

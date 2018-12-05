@@ -11,7 +11,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server.linux
+namespace: io.cloudslang.postgresql.linux
 
 operation:
   name: derive_service_name_from_installation_location

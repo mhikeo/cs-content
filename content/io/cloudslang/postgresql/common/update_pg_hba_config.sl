@@ -16,7 +16,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.configuration.common
+namespace: io.cloudslang.postgresql.common
 
 operation:
   name: update_pg_hba_config

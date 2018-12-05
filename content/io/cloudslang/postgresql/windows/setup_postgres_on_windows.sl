@@ -83,15 +83,13 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server.windows
+namespace: io.cloudslang.postgresql.windows
 
 imports:
-  scripts: io.cloudslang.base.powershell
-  strings: io.cloudslang.base.strings
-  print: io.cloudslang.base.print
+  postgres: io.cloudslang.postgresql
 
 flow:
-  name: install_postgres_on_windows
+  name: setup_postgres_on_windows
 
   inputs:
     - hostname:
@@ -106,6 +104,7 @@ flow:
         default: 'Administrator'
         sensitive: true
     - password:
+        default: ')I*nH4gLG;6wh=mNbUsDzOs6PG)!LAF3'
         required: false
         sensitive: true
     - proxy_host:
@@ -161,81 +160,283 @@ flow:
         default: 'true'
         required: false
 
+    - listen_addresses:
+        default: 'localhost'
+        required: false
+    - ssl:
+        required: false
+    - ssl_ca_file:
+        required: false
+    - ssl_cert_file:
+        required: false
+    - ssl_key_file:
+        required: false
+    - max_connections:
+        required: false
+    - shared_buffers:
+        required: false
+    - effective_cache_size:
+        required: false
+    - autovacuum:
+        required: false
+    - work_mem:
+        required: false
+    - configuration_file:
+        required: false
+    - allowed_hosts:
+        required: false
+    - allowed_users:
+        required: false
+    - reboot:
+        default: 'no'
+        required: false
+    - private_key_file:
+        required: true
+    - temp_local_dir:
+        default: '/tmp'
+        required: false
+
+    - db_name:
+        default: 'postgres'
+    - db_description:
+        required: false
+    - db_tablespace:
+        required: false
+    - db_encoding:
+        required: false
+    - db_locale:
+        required: false
+    - db_owner:
+        required: false
+    - db_template:
+        required: false
+    - db_echo:
+        default: 'true'
+
+    - start_on_boot:
+        required: false
+
+
   workflow:
-    - download_installer_module:
+    # - install_postgres:
+    #     do:
+    #       postgres.windows.install_postgres_on_windows:
+    #       - hostname
+    #       - port
+    #       - protocol
+    #       - username
+    #       - password
+    #       - proxy_host
+    #       - proxy_port
+    #       - proxy_username
+    #       - proxy_password
+    #       - connection_timeout
+    #       - execution_timeout
+    #       - installation_file
+    #       - installation_location
+    #       - data_dir
+    #       - server_port
+    #       - service_name
+    #       - service_account
+    #       - service_password
+    #       - locale
+    #       - create_shortcuts
+    #       - debug_level
+    #       - debug_trace
+    #       - extract_only
+    #       - installer_language
+    #       - install_runtimes
+    #     publish:
+    #       - return_result
+    #       - return_code
+    #       - exception
+    #     navigate:
+    #       - SUCCESS: stop_postgres
+    #       - DOWNLOAD_INSTALLER_MODULE_FAILURE: FAILURE
+    #       - POSTGRES_INSTALL_PACKAGE_FAILURE: FAILURE
+
+    # - configure_postgres:
+    #     do:
+    #       postgres.windows.configure_postgres_on_windows:
+    #         - hostname
+    #         - hostname_port: ${port}
+    #         - hostname_protocol: ${protocol}
+    #         - username
+    #         - password
+    #         - proxy_host
+    #         - proxy_port
+    #         - proxy_username
+    #         - proxy_password
+    #         - execution_timeout
+    #         - listen_addresses
+    #         - port: ${server_port}
+    #         - ssl
+    #         - ssl_ca_file
+    #         - ssl_cert_file
+    #         - ssl_key_file
+    #         - max_connections
+    #         - shared_buffers
+    #         - effective_cache_size
+    #         - autovacuum
+    #         - work_mem
+    #         - configuration_file
+    #         - allowed_hosts
+    #         - allowed_users
+    #         - installation_location
+    #         - data_dir
+    #         - reboot
+    #         - private_key_file
+    #         - temp_local_dir
+    #     publish:
+    #       - return_result
+    #       - return_code
+    #       - exception
+    #     navigate:
+    #       - SUCCESS: create_database
+    #       - FAILURE: FAILURE
+
+    - create_database:
         do:
-          scripts.powershell_script:
-            - host: ${hostname}
-            - port
-            - protocol
+          postgres.windows.create_db_on_windows:
+            - hostname
+            - hostname_port: ${port}
+            - hostname_protocol: ${protocol}
             - username
             - password
             - proxy_host
             - proxy_port
             - proxy_username
             - proxy_password
-            - operation_timeout: ${execution_timeout}
-            - script: >
-                ${'(New-Object Net.WebClient).DownloadFile(\"https://drive.google.com/uc?export=download&id=1RbJTU9-sg1hLjDz5B4p74vX8oF-oHhZH\",\"C:\Windows\Temp\Install-Postgres.zip\");(new-object -com shell.application).namespace(\"C:\Program Files\WindowsPowerShell\Modules\").CopyHere((new-object -com shell.application).namespace(\"C:\Windows\Temp\Install-Postgres.zip\").Items(),16)'}
+            - execution_timeout
+            - installation_location
+            - service_name
+            - db_name
+            - db_description
+            - db_tablespace
+            - db_encoding
+            - db_locale
+            - db_owner
+            - db_template
+            - db_echo
         publish:
-          -  return_code
-          -  return_result
-          -  stderr
-          -  script_exit_code
-          -  exception
+          - return_result
+          - return_code
+          - exception
         navigate:
-          - SUCCESS: install_postgres
-          - FAILURE: DOWNLOAD_INSTALLER_MODULE_FAILURE
+          - SUCCESS: stop_postgres
+          - FAILURE: FAILURE
 
-    - install_postgres:
+    - stop_postgres:
         do:
-          scripts.powershell_script:
-            - host: ${hostname}
-            - port
-            - protocol
+          postgres.windows.operate_postgres_on_windows:
+            - hostname
+            - hostname_port: ${port}
+            - hostname_protocol: ${protocol}
             - username
             - password
             - proxy_host
             - proxy_port
             - proxy_username
             - proxy_password
-            - operation_timeout: '600'
-            - script: >
-                ${'Import-Module Install-Postgres; Install-Postgres -User \"' + service_account + '\" -Password \"' + service_password + '\" -InstallerUrl \"' + installation_file + '\" -InstallPath \"' + installation_location + '\" -DataPath \"' + data_dir + '\" -Locale \"' + locale + '\" -Port ' + server_port + ' -ServiceName \"' + service_name + '\" -CreateShortcuts ' + '1' if (create_shortcuts) else '0' + ' -DebugLevel \"' + debug_level + '\" -DebugTrace \"' + debug_trace + '\" -ExtractOnly ' + '1' if (extract_only) else '0' + ' -InstallerLanguage \"' + installer_language + '\" -InstallerRuntimes ' + '1' if (install_runtimes) else '0'}
+            - execution_timeout
+            - installation_location
+            - data_dir
+            - service_name
+            - start_on_boot
+            - private_key_file
+            - operation: 'stop'
         publish:
-          -  return_code
-          -  return_result
-          -  stderr
-          -  script_exit_code
-          -  exception
+          - return_result
+          - return_code
+          - exception
         navigate:
-          - SUCCESS: check_postgres_install_is_successful
-          - FAILURE: print_install_error
+          - SUCCESS: start_postgres
+          - FAILURE: FAILURE
 
-    - print_install_error:
+    - start_postgres:
         do:
-          print.print_text:
-            - text: ${stderr}
-        navigate:
-          - SUCCESS: POSTGRES_INSTALL_PACKAGE_FAILURE
-
-    - check_postgres_install_is_successful:
-        do:
-          strings.string_occurrence_counter:
-            - string_in_which_to_search: ${return_result}
-            - string_to_find: 'Postgres has been installed'
+          postgres.windows.operate_postgres_on_windows:
+            - hostname
+            - hostname_port: ${port}
+            - hostname_protocol: ${protocol}
+            - username
+            - password
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - execution_timeout
+            - installation_location
+            - data_dir
+            - service_name
+            - start_on_boot
+            - private_key_file
+            - operation: 'start'
         publish:
-          - return_result: 'The PostgreSQL server was successfully installed'
+          - return_result
+          - return_code
+          - exception
+        navigate:
+          - SUCCESS: restart_postgres
+          - FAILURE: FAILURE
+
+    - restart_postgres:
+        do:
+          postgres.windows.operate_postgres_on_windows:
+            - hostname
+            - hostname_port: ${port}
+            - hostname_protocol: ${protocol}
+            - username
+            - password
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - execution_timeout
+            - installation_location
+            - data_dir
+            - service_name
+            - start_on_boot
+            - private_key_file
+            - operation: 'restart'
+        publish:
+          - return_result
+          - return_code
+          - exception
+        navigate:
+          - SUCCESS: drop_database
+          - FAILURE: FAILURE
+
+    - drop_database:
+        do:
+          postgres.windows.drop_db_on_windows:
+            - hostname
+            - hostname_port: ${port}
+            - hostname_protocol: ${protocol}
+            - username
+            - password
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - execution_timeout
+            - installation_location
+            - service_name
+            - db_name
+            - db_echo
+        publish:
+          - return_result
+          - return_code
+          - exception
         navigate:
           - SUCCESS: SUCCESS
-          - FAILURE: POSTGRES_INSTALL_PACKAGE_FAILURE
+          - FAILURE: FAILURE
 
   outputs:
     -  return_code
     -  return_result
-    -  exception: ${stderr}
+    -  stderr
 
   results:
     - SUCCESS
-    - DOWNLOAD_INSTALLER_MODULE_FAILURE
-    - POSTGRES_INSTALL_PACKAGE_FAILURE
+    - FAILURE

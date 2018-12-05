@@ -51,7 +51,7 @@
 #!!#
 ########################################################################################################################
 
-namespace: io.cloudslang.postgresql.server.linux
+namespace: io.cloudslang.postgresql.linux
 
 imports:
   postgres: io.cloudslang.postgresql
@@ -153,7 +153,7 @@ flow:
   workflow:
     - install_postgres:
         do:
-          postgres.server.linux.install_postgres_on_linux:
+          postgres.linux.install_postgres_on_linux:
             - hostname
             - username
             - password
@@ -184,7 +184,7 @@ flow:
 
     - configure_postgres:
         do:
-          postgres.configuration.configure_postgres_on_linux:
+          postgres.linux.configure_postgres_on_linux:
             - hostname
             - username
             - password
@@ -227,7 +227,7 @@ flow:
 
     - create_database:
         do:
-          postgres.maintenance.create_db_on_linux:
+          postgres.linux.create_db_on_linux:
             - hostname
             - username
             - password
@@ -261,7 +261,7 @@ flow:
 
     - stop_postgres:
         do:
-          postgres.server.linux.operate_postgres_on_linux:
+          postgres.linux.operate_postgres_on_linux:
             - hostname
             - username
             - password
@@ -287,7 +287,7 @@ flow:
 
     - start_postgres:
         do:
-          postgres.server.linux.operate_postgres_on_linux:
+          postgres.linux.operate_postgres_on_linux:
             - hostname
             - username
             - password
@@ -313,7 +313,7 @@ flow:
 
     - restart_postgres:
         do:
-          postgres.server.linux.operate_postgres_on_linux:
+          postgres.linux.operate_postgres_on_linux:
             - hostname
             - username
             - password
@@ -339,7 +339,7 @@ flow:
 
     - drop_database:
         do:
-          postgres.maintenance.drop_db_on_linux:
+          postgres.linux.drop_db_on_linux:
             - hostname
             - username
             - password

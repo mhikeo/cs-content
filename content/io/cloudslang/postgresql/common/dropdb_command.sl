@@ -17,7 +17,7 @@
 #! @result SUCCESS: the command was created successfully
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.postgresql.maintenance.commands
+namespace: io.cloudslang.postgresql.common
 
 imports:
 
