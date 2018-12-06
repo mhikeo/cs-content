@@ -93,6 +93,7 @@ flow:
               - pg_ctl_location
               - hostname
               - username
+              - password
               - proxy_host
               - proxy_port
               - proxy_username
