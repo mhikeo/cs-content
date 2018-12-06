@@ -33,7 +33,7 @@ operation:
         required: false
   python_action:
     script: |
-      result = 'dropdb '
+      result = 'dropdb'
       if (db_echo is not None and db_echo.lower() == 'true'):
          result+= ' --echo'
       if db_username is not None:
