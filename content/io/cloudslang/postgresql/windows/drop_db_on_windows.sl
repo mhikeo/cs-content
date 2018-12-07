@@ -88,6 +88,7 @@ flow:
         required: true
     - service_password:
         required: true
+        sensitive: true
     - db_name:
         required: true
     - db_echo:

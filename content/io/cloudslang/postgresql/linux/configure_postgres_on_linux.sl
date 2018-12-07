@@ -95,6 +95,7 @@ flow:
         required: true
     - username:
         sensitive: true
+        required: true
     - password:
         default: ''
         required: false
