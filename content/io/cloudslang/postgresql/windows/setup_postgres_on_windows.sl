@@ -101,10 +101,9 @@ flow:
         default: 'http'
         required: false
     - username:
-        default: 'Administrator'
         sensitive: true
     - password:
-        default: ')I*nH4gLG;6wh=mNbUsDzOs6PG)!LAF3'
+        default: ''
         required: false
         sensitive: true
     - proxy_host:
@@ -136,8 +135,8 @@ flow:
     - service_account:
         default: 'postgres'
     - service_password:
-        default: 'Passw0rd123!'
-        required: false
+        sensitive: true
+        required: true
     - locale:
         default: 'English, United States'
         required: false
@@ -159,7 +158,6 @@ flow:
     - install_runtimes:
         default: 'true'
         required: false
-
     - listen_addresses:
         default: 'localhost'
         required: false
@@ -195,7 +193,6 @@ flow:
     - temp_local_dir:
         default: '/tmp'
         required: false
-
     - db_name:
         default: 'postgres'
     - db_description:
@@ -212,7 +209,6 @@ flow:
         required: false
     - db_echo:
         default: 'true'
-
     - start_on_boot:
         required: false
 

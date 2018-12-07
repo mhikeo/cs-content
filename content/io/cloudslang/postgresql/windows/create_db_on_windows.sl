@@ -102,6 +102,7 @@ flow:
         required: true
     - service_password:
         required: true
+        sensitive: true
     - db_name:
         default: 'postgres'
     - db_description:
