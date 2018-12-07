@@ -1,6 +1,6 @@
 ########################################################################################################################
 #!!
-#! @description: Performs several powershell commands in order to deploy install postgresql application on machines that are running
+#! @description: Performs several powershell commands in order to do a complete setup of postgresql on machines that are running
 #!               windows Server 2016
 #!
 #! @input hostname: Hostname or IP address of the target machine
@@ -77,9 +77,8 @@
 #! @output return_code: '0' if success, '-1' otherwise
 #! @output stderr: contains the stack trace in case of an exception
 #!
-#! @result SUCCESS: Postgresql install and/or startup was successful
-#! @result DOWNLOAD_INSTALLER_MODULE_FAILURE: There was an error downloading or extracting the installer module
-#! @result POSTGRES_INSTALL_PACKAGE_FAILURE: error installing postgres
+#! @result SUCCESS: Postgresql setup was successful
+#! @result FAILURE: Postgresql setup was failed
 #!!#
 ########################################################################################################################
 
