@@ -1,6 +1,6 @@
 ########################################################################################################################
 #!!
-#! @description: This flow allows operating (start/stop/restart/reload/status) on existing postgres database.
+#! @description: This flow checks if existing postgres database is up.
 #!
 #! @input hostname: Hostname or IP address of the target machine
 #! @input hostname_port: The WinRM service port
@@ -114,8 +114,8 @@ flow:
   outputs:
       - process_id : ${return_result.splitlines()[2].split(':')[1] if return_result is not None and 'ProcessId' in return_result else ""}
       - return_result
-      - exception : ${get('standard_err','').strip()}
-      - return_code
+      - exception : ${get('stderr','').strip()}
+      - return_code: ${}
   results:
     - SUCCESS
     - FAILURE

@@ -2,9 +2,9 @@ testDropDbOnWindowsSuccess:
   testSuites: [postgresql,postgresql-windows,dropdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_drop_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -15,9 +15,9 @@ testDropDbWithInvalidUsernameOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,dropdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_drop_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
+    - hostname: <hostname>
     - username: 'invalid-username'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - password: <password>
     - db_name: 'cs_test'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -30,9 +30,9 @@ testDropDbWithInvalidInstallationLocationOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,dropdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_drop_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - installation_location: '/some/path'
     - service_account: 'postgres'
@@ -47,9 +47,9 @@ testDropDbWithInvalidServiceAccountOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,dropdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_drop_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - service_account: 'invalid-service-account'
     - service_password: 'password'

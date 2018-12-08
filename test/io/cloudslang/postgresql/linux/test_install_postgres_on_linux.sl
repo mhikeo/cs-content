@@ -161,7 +161,7 @@ flow:
             - second_string: ''
        navigate:
          - SUCCESS: derive_postgres_version
-         - FAILURE: SERVICE_NAME_HAS_REGISTERED
+         - FAILURE: POSTGRES_ALREADY_EXISTS
 
     - derive_postgres_version:
         do:
@@ -172,32 +172,7 @@ flow:
           - home_dir
           - initdb_dir
         navigate:
-          - SUCCESS: yum_erase_postgres_package_on_linux
-
-    #  It's required to test several test cases (invalid file and others); Otherwise it'll check repo and skip some steps of installation flow
-    - yum_erase_postgres_package_on_linux:
-        do:
-           ssh.ssh_flow:
-              - host: ${hostname}
-              - port: '22'
-              - username
-              - password
-              - proxy_host
-              - proxy_port
-              - proxy_username
-              - proxy_password
-              - connect_timeout: ${connection_timeout}
-              - timeout: ${execution_timeout}
-              - private_key_file
-              - command: >
-                  ${'sudo yum -y erase ' + pkg_name +'*'}
-        publish:
-            - return_code
-            - return_result
-            - exception
-        navigate:
-           - SUCCESS: install_postgres_on_linux
-           - FAILURE: FAILURE
+          - SUCCESS: install_postgres_on_linux
 
     - install_postgres_on_linux:
        do:
@@ -248,58 +223,59 @@ flow:
                   ${'sudo su - postgres -c "psql --version"'}
         publish:
             - return_code
+            - standard_err
             - installed_postgres_version: ${return_result}
             - exception: ${standard_err}
         navigate:
             - SUCCESS: clear_host_postreqeust
-            - FAILURE: clear_host_postreqeust_with_failure
-
-    - clear_host_postreqeust_with_failure:
-        do:
-           ssh.ssh_flow:
-              - host: ${hostname}
-              - port: '22'
-              - username
-              - password
-              - proxy_host
-              - proxy_port
-              - proxy_username
-              - proxy_password
-              - connect_timeout: ${connection_timeout}
-              - timeout: ${execution_timeout}
-              - private_key_file
-              - command: >
-                  ${'sudo systemctl stop ' + service_name+ '; sudo systemctl disable ' + service_name +  ' ; sudo rm -fR ' + initdb_dir + ' ; sudo rm -fR /usr/' + home_dir + '/data ; sudo rm /usr/lib/systemd/system/' + service_name + '.service ; sudo yum -y erase ' + pkg_name +'*'}
-        publish:
-            - return_code
-            - return_result
-            - exception: ${standard_err}
-        navigate:
-            - SUCCESS: FAILURE
-            - FAILURE: FAILURE
+            - FAILURE: clear_host_postreqeust
 
     - clear_host_postreqeust:
         do:
-           ssh.ssh_flow:
-              - host: ${hostname}
-              - port: '22'
+           postgres.linux.uninstall_postgres_on_linux:
+              - hostname
               - username
               - password
               - proxy_host
               - proxy_port
               - proxy_username
               - proxy_password
-              - connect_timeout: ${connection_timeout}
-              - timeout: ${execution_timeout}
+              - connection_timeout
+              - execution_timeout
+              - service_name
+              - installation_location
               - private_key_file
-              - command: >
-                  ${'sudo systemctl stop ' + service_name+ '; sudo systemctl disable ' + service_name +  ' ; sudo rm -fR ' + initdb_dir + ' ; sudo rm -fR /usr/' + home_dir + '/data ; sudo rm /usr/lib/systemd/system/' + service_name + '.service ; sudo yum -y erase ' + pkg_name +'*'}
         publish:
             - return_code
             - return_result
+            - standard_err
             - exception: ${standard_err}
         navigate:
             - SUCCESS: SUCCESS
+            - FAILURE: FAILURE
+
+    - clear_host_postreqeust_with_failure:
+        do:
+           postgres.linux.uninstall_postgres_on_linux:
+              - hostname
+              - username
+              - password
+              - proxy_host
+              - proxy_port
+              - proxy_username
+              - proxy_password
+              - connection_timeout
+              - execution_timeout
+              - service_name
+              - installation_location
+              - private_key_file
+        publish:
+            - return_code
+            - return_result
+            - standard_err
+            - exception: ${standard_err}
+        navigate:
+            - SUCCESS: FAILURE
             - FAILURE: FAILURE
   outputs:
     - install_return_result
@@ -313,5 +289,5 @@ flow:
     - SUCCESS
     - FAILURE
     - DEFAULT_PORT_IS_BIND
-    - SERVICE_NAME_HAS_REGISTERED
+    - POSTGRES_ALREADY_EXISTS
 

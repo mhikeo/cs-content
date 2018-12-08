@@ -3,6 +3,7 @@
 #! @description: Extract exception message from powershell xml objects. Several types of outputs:
 #!              - #< CLIXML some exception <Objs Version></Objs>
 #!              - #< CLIXML <Objs Version><S S="Error">description</S></Objs>
+#!              - <Objs Version><S S="Error">description</S></Objs>
 #!
 #! @input xml_object: powershell xml object
 #!
@@ -34,6 +35,12 @@ operation:
              result = temp.split('<Objs Version')[0].strip()
         else:
           result = temp
+      elif '<Objs Version' in temp:
+         if '<S S="Error"' in temp:
+            firstErrorElement = temp.split('<S S="Error">')[1].strip()
+            result = firstErrorElement[0: len(firstErrorElement)-4]
+         else:
+           result = temp.split('<Objs Version')[0].strip()
       else:
          result = xml_object
   outputs:

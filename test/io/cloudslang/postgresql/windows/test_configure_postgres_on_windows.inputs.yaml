@@ -2,10 +2,10 @@ testConfigurePostgresConfigWithCommandLineParametersOnWindowsSuccess:
   testSuites: [postgresql,postgresql-windows,configure-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_configure_postgres_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
-    - private_key_file: './rhel-psql-aws.pem'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
+    - private_key_file: <my_file.pem>
     - service_name: 'postgresql'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -45,11 +45,11 @@ testConfigurePostgresConfigWithLocalPostgressConfFileOnWindowsSuccess:
   testSuites: [postgresql,postgresql-windows,configure-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_configure_postgres_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - configuration_file: ".\\cs-content\\test\\io\\cloudslang\\postgresql\\windows\\postgresql.conf"
-    - private_key_file: './rhel-psql-aws.pem'
+    - private_key_file: <my_file.pem>
     - service_name: 'postgresql'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -77,10 +77,10 @@ testConfigurePgHbaConfigWithLocalPostgressConfFileOnWindowsSuccess:
   testSuites: [postgresql,postgresql-windows,configure-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_configure_postgres_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
-    - private_key_file: './rhel-psql-aws.pem'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
+    - private_key_file: <my_file.pem>
     - service_name: 'postgresql'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -94,10 +94,10 @@ testConfigurePgHbaConfigWithCommandLineParametersOnWindowsSuccess:
   testSuites: [postgresql,postgresql-windows,configure-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_configure_postgres_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
-    - private_key_file: './rhel-psql-aws.pem'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
+    - private_key_file: <my_file.pem>
     - service_name: 'postgresql'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -112,10 +112,10 @@ testConfigurePostgresWithNonExistinglocalConfigurationFileOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,configure-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_configure_postgres_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
-    - private_key_file: './rhel-psql-aws.pem'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
+    - private_key_file: <my_file.pem>
     - service_name: 'postgresql'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'

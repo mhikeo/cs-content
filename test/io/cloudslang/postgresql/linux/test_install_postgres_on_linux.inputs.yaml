@@ -5,6 +5,7 @@ testInstallPostgresWithDefaultSettingsOnLinuxSuccess:
     - hostname: <hostname>
     - username: <username>
     - private_key_file: <my_file.pem>
+    - service_password: 'postgres'
   description: >
      Tests that run install_postgres_on_linux.sl to install postgres, check status, remove installation and finishes with SUCCESS.
      Notes:
@@ -12,7 +13,6 @@ testInstallPostgresWithDefaultSettingsOnLinuxSuccess:
        - service uses port 5432
   outputs:
     - install_return_result: "The PostgreSQL server was successfully installed"
-    - install_return_code: "0"
     - installed_postgres_version: |-
         psql (PostgreSQL) 10.6
   result: SUCCESS
@@ -23,10 +23,10 @@ testInstallPostgres10OnLinuxSuccess:
   inputs:
     - hostname: <hostname>
     - username: <username>
+    - private_key_file: <my_file.pem>
     - service_account: 'postgres'
     - service_name: 'postgresql-10'
     - service_password: 'postgres'
-    - private_key_file: <my_file.pem>
   description: >
      Tests that run install_postgres_on_linux.sl to install postgres, check status, remove installation and finishes with SUCCESS.
      Notes:
@@ -34,7 +34,6 @@ testInstallPostgres10OnLinuxSuccess:
        - service uses port 5432
   outputs:
     - install_return_result: "The PostgreSQL server was successfully installed"
-    - install_return_code: "0"
     - installed_postgres_version: |-
         psql (PostgreSQL) 10.6
   result: SUCCESS
@@ -45,11 +44,11 @@ testInstallPostgres96OnLinuxSuccess:
   inputs:
     - hostname: <hostname>
     - username: <username>
+    - private_key_file: <my_file.pem>
     - installation_file: 'https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat96-9.6-3.noarch.rpm'
     - service_account: 'postgres'
     - service_name: 'postgresql-9.6'
     - service_password: 'postgres'
-    - private_key_file: <my_file.pem>
   description: >
       Tests that run install_postgres_on_linux.sl to install postgres, check status, remove installation and finishes with SUCCESS.
       Notes:
@@ -57,7 +56,6 @@ testInstallPostgres96OnLinuxSuccess:
        - service uses port 5432
   outputs:
     - install_return_result: "The PostgreSQL server was successfully installed"
-    - install_return_code: "0"
     - installed_postgres_version: |-
         psql (PostgreSQL) 9.6.11
   result: SUCCESS
@@ -68,11 +66,11 @@ testInstallPostgres95OnLinuxSuccess:
   inputs:
     - hostname: <hostname>
     - username: <username>
+    - private_key_file: <my_file.pem>
     - installation_file: 'https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-3.noarch.rpm'
     - service_account: 'postgres'
     - service_name: 'postgresql-9.5'
     - service_password: 'postgres'
-    - private_key_file: <my_file.pem>
   description: >
       Tests that run install_postgres_on_linux.sl to install postgres, check status, remove installation and finishes with SUCCESS.
       Notes:
@@ -80,7 +78,6 @@ testInstallPostgres95OnLinuxSuccess:
         - service uses port 5432
   outputs:
     - install_return_result: "The PostgreSQL server was successfully installed"
-    - install_return_code: "0"
     - installed_postgres_version: |-
         psql (PostgreSQL) 9.5.15
   result: SUCCESS
@@ -91,8 +88,8 @@ testInstallPostgresWithInvalidFileOnLinuxFailure:
   inputs:
     - hostname: <hostname>
     - username: <username>
-    - installation_file: 'https://download.postgresql.org/pub/repos/yum/invalid.rpm'
     - private_key_file: <my_file.pem>
+    - installation_file: 'https://download.postgresql.org/pub/repos/yum/invalid.rpm'
   description: >
       Tests that run install_postgres_on_linux.sl to try installing postgres with invalid installation file and finishes with FAILURE.
   outputs:

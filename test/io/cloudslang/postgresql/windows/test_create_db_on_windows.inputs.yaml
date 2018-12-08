@@ -2,9 +2,9 @@ testCreateDbWithDefaultSettingsOnWindowsSuccess:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -17,9 +17,9 @@ testCreateDbWithCustomSettingsOnWindowsSuccess:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -40,9 +40,9 @@ testCreateDbWithInvalidUsernameOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
+    - hostname: <hostname>
     - username: 'invalid-user'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - password: <password>
     - db_name: 'cs_test'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -55,9 +55,9 @@ testCreateDbWithInvalidInstallationLocationOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - installation_location: '/some/path'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
@@ -71,9 +71,9 @@ testCreateDbWithInvalidServiceAccountOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - service_account: 'invalid-service-account'
     - service_password: 'password'
@@ -87,9 +87,9 @@ testCreateDbWithNonExsitingOwnerOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - db_owner: 'non-existing-db-owner'
     - service_account: 'postgres'
@@ -103,9 +103,9 @@ testCreateDbWithNonExsitingTemplateOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - db_template: 'non-existing-db-template'
     - service_account: 'postgres'
@@ -119,9 +119,9 @@ testCreateDbWithNonExsitingTablespaceOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - db_tablespace: 'non-existing-db-tablespace'
     - service_account: 'postgres'
@@ -135,9 +135,9 @@ testCreateDbWithInvalidLocaleOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - db_locale: 'invalid-locale'
     - service_account: 'postgres'
@@ -151,9 +151,9 @@ testCreateDbWithInvalidEncodingOnWindowsFailure:
   testSuites: [postgresql,postgresql-windows,createdb-postgres-windows]
   testFlowPath: io.cloudslang.postgresql.windows.test_create_db_on_windows
   inputs:
-    - hostname: 'ec2-54-227-216-203.compute-1.amazonaws.com'
-    - username: 'Administrator'
-    - password: 'U.!M6@D7Rp7So5s7V@7ZEdyWwc3aVlBA'
+    - hostname: <hostname>
+    - username: <username>
+    - password: <password>
     - db_name: 'cs_test'
     - db_encoding: 'invalid-encoding'
     - service_account: 'postgres'
