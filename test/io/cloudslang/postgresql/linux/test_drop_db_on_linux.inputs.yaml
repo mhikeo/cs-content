@@ -11,7 +11,7 @@ testDropDbOnLinuxSuccess:
 
 testDropDbWithInvalidUsernameOnLinuxFailure:
   testSuites: [postgresql,postgresql-linux,dropdb-postgres-linux]
-  testFlowPath: io.cloudslang.postgresql.linux.test_create_db_on_linux
+  testFlowPath: io.cloudslang.postgresql.linux.test_drop_db_on_linux
   inputs:
     - hostname: <hostname>
     - username: 'invalid-username'
@@ -23,7 +23,7 @@ testDropDbWithInvalidUsernameOnLinuxFailure:
 
 testDropDbWithInvalidInstallationLocationOnLinuxFailure:
   testSuites: [postgresql,postgresql-linux,dropdb-postgres-linux]
-  testFlowPath: io.cloudslang.postgresql.linux.test_create_db_on_linux
+  testFlowPath: io.cloudslang.postgresql.linux.test_drop_db_on_linux
   inputs:
     - hostname: <hostname>
     - username: <username>
@@ -36,7 +36,7 @@ testDropDbWithInvalidInstallationLocationOnLinuxFailure:
 
 testDropDbWithInvalidPgCtlLocationOnLinuxFailure:
   testSuites: [postgresql,postgresql-linux,dropdb-postgres-linux]
-  testFlowPath: io.cloudslang.postgresql.linux.test_create_db_on_linux
+  testFlowPath: io.cloudslang.postgresql.linux.test_drop_db_on_linux
   inputs:
     - hostname: <hostname>
     - username: <username>
