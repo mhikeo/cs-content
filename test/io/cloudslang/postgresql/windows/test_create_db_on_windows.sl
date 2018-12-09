@@ -29,10 +29,12 @@
 #!                               Default: 'C:\\Program Files\\PostgreSQL\\10.6'
 #! @input service_name: The service name
 #!                      Default: 'postgresql'
+#! @input service_account: The service accoount
+#! @input service_password: The service password
 #! @input db_name: Specifies the name of the database to be dropped
 #! @input db_echo: Echo the commands that dropdb generates and sends to the server
-#!              Valid values: 'true', 'false'
-#!              Default value: 'true'
+#!                 Valid values: 'true', 'false'
+#!                 Default value: 'true'
 #!
 #! @output return_result: STDOUT of the remote machine in case of success or the cause of the error in case of exception
 #! @output return_code: '0' if success, '-1' otherwise
@@ -49,11 +51,10 @@ imports:
   strings: io.cloudslang.base.strings
   utils: io.cloudslang.base.utils
   postgres: io.cloudslang.postgresql
-  print: io.cloudslang.base.print
   scripts: io.cloudslang.base.powershell
 
 flow:
-  name: drop_db_on_windows
+  name: test_create_db_on_windows
 
   inputs:
     - hostname:
@@ -90,63 +91,69 @@ flow:
         required: true
         sensitive: true
     - db_name:
-        required: true
+        default: 'postgres'
+    - db_description:
+        required: false
+    - db_tablespace:
+        required: false
+    - db_encoding:
+        required: false
+    - db_locale:
+        required: false
+    - db_owner:
+        required: false
+    - db_template:
+        required: false
     - db_echo:
-        default: 'false'
+        default: 'true'
   workflow:
-    - check_postgress_is_running:
-        do:
-           postgres.windows.utils.get_system_service_command:
-              - service_name: ${service_name}
-              - operation: 'status'
-        publish:
-           - pwsh_command
-           - exception
-           - return_code
-           - return_result
-        navigate:
-          - SUCCESS: get_postgresql_service_user
-          - FAILURE: FAILURE
 
-    - get_postgresql_service_user:
+    - create_db:
         do:
-           postgres.windows.utils.get_system_service_user:
-              - service_name
-              - hostname
-              - hostname_port
-              - hostname_protocol
-              - username
-              - password
-              - execution_timeout
-              - proxy_host
-              - proxy_port
-              - proxy_username
-              - proxy_password
-              - private_key_file
+          postgres.windows.create_db_on_windows:
+            - hostname
+            - hostname_port
+            - hostname_protocol
+            - username
+            - password
+            - proxy_host
+            - proxy_port
+            - proxy_username
+            - proxy_password
+            - execution_timeout
+            - installation_location
+            - service_name
+            - service_account
+            - service_password
+            - db_name
+            - db_description
+            - db_tablespace
+            - db_encoding
+            - db_locale
+            - db_owner
+            - db_template
+            - db_echo
         publish:
-           - service_user
-           - exception
-           - return_code
-           - return_result
+          - return_result
+          - exception
+          - return_code
+          - stderr
         navigate:
-          - SUCCESS: build_dropdb_command
-          - FAILURE: FAILURE
+          - SUCCESS: build_db_info_query
+          - FAILURE: parse_xml_exception
 
-    - build_dropdb_command:
+    - build_db_info_query:
         do:
-           postgres.common.dropdb_command:
+          postgres.common.get_db_info_query:
               - db_name
-              - db_echo
-              - db_username: ${service_user}
-              - db_password: ${service_password}
         publish:
-           - psql_command
+          - sql_query
         navigate:
-           - SUCCESS: drop_database
+          - SUCCESS: get_db_info_settings
 
-    - drop_database:
+    - get_db_info_settings:
         do:
-            scripts.powershell_script:
+          scripts.powershell_script:
               - host: ${hostname}
               - port: ${hostname_port}
               - protocol: ${hostname_protocol}
@@ -158,18 +165,58 @@ flow:
               - proxy_password
               - operation_timeout: ${execution_timeout}
               - script: >
-                  ${ '$env:PGPASSWORD = \"' + service_password + '\"; Set-Location -Path \"' + installation_location+'\\\\bin\"; .\\' + psql_command}
+                  ${'$env:PGPASSWORD=\''+service_password+'\';Set-Location -Path \"' + installation_location+'\\\\bin\"; $psql = get-command .\\psql.exe; $user =\''+ service_account +'\'; & $psql -U $user -A -t -c \"'+ sql_query + '\"'}
         publish:
-          - return_code
-          - script_exit_code
-          - return_result
-          - stderr
-          - exception
+            - return_code
+            - return_result
+            - exception
+            - db_settings: ${return_result.strip()}
+        navigate:
+          - SUCCESS: drop_db
+          - FAILURE: drop_db
+
+    - drop_db:
+         do:
+            postgres.windows.drop_db_on_windows:
+              - hostname
+              - hostname_port
+              - hostname_protocol
+              - username
+              - password
+              - proxy_host
+              - proxy_port
+              - proxy_username
+              - proxy_password
+              - execution_timeout
+              - installation_location
+              - service_name
+              - service_account
+              - service_password
+              - db_name
+              - db_echo
+         publish:
+              - return_result
+              - exception
+              - return_code
+         navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: FAILURE
+
+    - parse_xml_exception:
+         do:
+            parse_powershell_xml_object:
+               - xml_object: ${get('exception', '')}
+         publish:
+             - exception_from_xml: ${exception_message}
+         navigate:
+            - SUCCESS: FAILURE
 
   outputs:
     - return_result
-    - exception: ${'' if script_exit_code == "0" else stderr}
-    - return_code : ${script_exit_code}
+    - db_settings
+    - exception_from_xml: ${get('exception_from_xml', '')}
+    - exception: ${get('exception', '').strip()}
+    - return_code
   results:
     - SUCCESS
     - FAILURE

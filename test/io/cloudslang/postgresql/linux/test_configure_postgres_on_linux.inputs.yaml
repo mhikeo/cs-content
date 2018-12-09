@@ -21,7 +21,7 @@ testConfigurePostgresConfigWithCommandLineParametersOnLinuxSuccess:
       Tests that run configure_postgres_on_linux.sl to update parameters from CLI and finishes with SUCCESS
       Notes:
         ssl_*_file must be existing files or empty values. Otherwise, postgres doesn't start after rebooting
-        Set 'reboot' = yes to verify updated parameters from a database
+        Set 'reboot' = yes to apply the parameters and verify them by loading from a postgres database
   outputs:
     - return_result: |-
         autovacuum|off
@@ -44,13 +44,12 @@ testConfigurePostgresConfigWithLocalPostgressConfFileOnLinuxSuccess:
     - hostname: <hostname>
     - username: <username>
     - private_key_file: <my_file.pem>
-    - configuration_file: <full_path_to_postgresql.conf>
+    - configuration_file: ".\\cs-content\\test\\io\\cloudslang\\postgresql\\linux\\postgresql.conf"
     - reboot: 'yes'
   description: >
       Tests that run configure_postgres_on_linux.sl to update parameters from CLI and finishes with SUCCESS
       Notes:
-        'configuration_file' must be the absolute file path
-        Set 'reboot' = yes to verify updated parameters from a postgres database
+        Set 'reboot' = yes to apply the parameters and verify them by loading from a postgres database
   outputs:
     - return_result: |-
         autovacuum|off
@@ -73,11 +72,9 @@ testConfigurePgHbaConfigWithLocalPostgressConfFileOnLinuxSuccess:
     - hostname: <hostname>
     - username: <username>
     - private_key_file: <my_file.pem>
-    - configuration_file:  <full_path_to_pg_hba.conf>
+    - configuration_file: ".\\cs-content\\test\\io\\cloudslang\\postgresql\\linux\\pg_hba.conf"
   description: >
       Tests that run configure_postgres_on_linux.sl to update pg_hba.conf from CLI and finishes with SUCCESS
-      Notes:
-        'configuration_file' must be the absolute file path
   outputs:
   result: SUCCESS
 
@@ -92,8 +89,6 @@ testConfigurePgHbaConfigWithCommandLineParametersOnLinuxSuccess:
     - allowed_hosts: 'local'
   description: >
       Tests that run configure_postgres_on_linux.sl to update pg_hba.conf from CLI and finishes with SUCCESS
-      Notes:
-        'configuration_file' must be the absolute file path
   outputs:
   result: SUCCESS
 

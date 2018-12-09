@@ -76,7 +76,7 @@ testOperatePostgresWithEnableOnBootOnLinuxSuccess:
     - username: <username>
     - start_on_boot: 'true'
     - private_key_file: <my_file.pem>
-  description: "Tests that run operate_postgres_on_linux.sl with start_on_boot='true' and finishes with FAILURE"
+  description: "Tests that run operate_postgres_on_linux.sl with start_on_boot='true' and finishes with SUCCESS"
   outputs:
     - service_status: "enabled"
   result: SUCCESS
@@ -89,7 +89,7 @@ testOperatePostgresWithDisableOnBootOnLinuxSuccess:
     - username: <username>
     - start_on_boot: 'false'
     - private_key_file: <my_file.pem>
-  description: "Tests that run operate_postgres_on_linux.sl with start_on_boot='false' and finishes with FAILURE"
+  description: "Tests that run operate_postgres_on_linux.sl with start_on_boot='false' and finishes with SUCCESS"
   outputs:
     - service_status: "disabled"
   result: SUCCESS
