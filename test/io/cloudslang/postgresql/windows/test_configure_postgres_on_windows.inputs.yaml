@@ -48,7 +48,7 @@ testConfigurePostgresConfigWithLocalPostgressConfFileOnWindowsSuccess:
     - hostname: <hostname>
     - username: <username>
     - password: <password>
-    - configuration_file: ".\\cs-content\\test\\io\\cloudslang\\postgresql\\windows\\postgresql.conf"
+    - configuration_file: ".\\cs-content\\test\\io\\cloudslang\\postgresql\\windows\\resources\\postgresql.conf"
     - private_key_file: <my_file.pem>
     - service_name: 'postgresql'
     - service_account: 'postgres'
@@ -84,7 +84,7 @@ testConfigurePgHbaConfigWithLocalPostgressConfFileOnWindowsSuccess:
     - service_name: 'postgresql'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
-    - configuration_file: ".\\cs-content\\test\\io\\cloudslang\\postgresql\\windows\\pg_hba.conf"
+    - configuration_file: ".\\cs-content\\test\\io\\cloudslang\\postgresql\\windows\\resources\\pg_hba.conf"
   description: >
       Tests that run configure_postgres_on_windows.sl to update pg_hba.conf from CLI and finishes with SUCCESS
   outputs:
