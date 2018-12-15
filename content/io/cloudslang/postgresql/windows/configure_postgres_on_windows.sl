@@ -376,7 +376,7 @@ flow:
     - update_postgresql_conf:
         do:
            postgres.common.update_postgres_config:
-             - file_path: ${temp_local_dir + '/postgresql.conf'}
+             - file_path: ${temp_local_dir}
              - listen_addresses: ${listen_addresses}
              - port: ${port}
              - ssl: ${ssl}
@@ -412,7 +412,7 @@ flow:
     - update_pg_hba_conf:
         do:
            postgres.common.update_pg_hba_config:
-              - file_path: ${temp_local_dir + '/pg_hba.conf'}
+              - file_path: ${temp_local_dir}
               - allowed_hosts: ${allowed_hosts}
               - allowed_users: ${allowed_users}
         publish:
