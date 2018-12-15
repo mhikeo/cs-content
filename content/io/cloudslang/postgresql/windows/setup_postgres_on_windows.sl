@@ -69,6 +69,11 @@
 #!                         Default: 'postgres'
 #! @input service_password: The service password
 #!                          Optional
+#! @input private_key_file: The absolute path to a private key file
+#!                          Optional
+#! @input temp_local_folder: The local folder to keep files downloaded from remote host. Use relative path to support different platforms. If the folder doesn't exist, it'll be created.
+#!                           Default: '/tmp'
+#!                           Optional
 #! @input locale: The locale
 #!                Default: 'English, United States'
 #!                Optional
@@ -190,7 +195,7 @@ flow:
         required: false
     - private_key_file:
         required: true
-    - temp_local_dir:
+    - temp_local_folder:
         default: '/tmp'
         required: false
     - db_name:
@@ -282,7 +287,7 @@ flow:
             - data_dir
             - reboot
             - private_key_file
-            - temp_local_dir
+            - temp_local_folder
         publish:
           - return_result
           - return_code
