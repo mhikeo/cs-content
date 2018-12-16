@@ -105,11 +105,14 @@ flow:
             - proxy_password
             - operation_timeout: ${execution_timeout}
             - script: >
-                ${'Set-Location -Path \"' + installation_location+'\"; $uninstaller = get-command .\\uninstall-postgresql.exe; & $uninstaller --mode unattended;' }
+                ${'Remove-LocalUser -Name ' + service_account + '; Set-Location -Path \"' + installation_location+'\"; $uninstaller = get-command .\\uninstall-postgresql.exe; & $uninstaller --mode unattended;' }
         publish:
             - return_code
             - return_result
             - exception: ${get('stderr')}
+        navigate:
+           - SUCCESS: remove_data_and_service_account
+           - FAILURE: FAILURE
 
     - remove_data_and_service_account:
         do:
@@ -125,7 +128,7 @@ flow:
             - proxy_password
             - operation_timeout: ${execution_timeout}
             - script: >
-                ${'Remove-Item -Path \"' + data_dir + '\" –recurse ; Remove-LocalUser -Name \"' + service_account + '\"' }
+                ${'Remove-Item -Path \"' + data_dir + '\" -Recurse -Force;' }
         publish:
             - return_code
             - return_result

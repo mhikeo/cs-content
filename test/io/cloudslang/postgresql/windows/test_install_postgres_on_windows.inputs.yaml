@@ -11,7 +11,6 @@ testInstallPostgresWithDefaultSettingsOnWindowsSuccess:
   description: >
      Tests that run install_postgres_on_windows.sl to install postgres, check status, remove installation and finishes with SUCCESS.
      Notes:
-       - service_name is 'postgresql-10' by default
        - service uses port 5432
   outputs:
     - installer_return_result: "The PostgreSQL server was successfully installed"
@@ -33,7 +32,6 @@ testInstallPostgres10OnWindowsSuccess:
   description: >
      Tests that run install_postgres_on_windows.sl to install postgres, check status, remove installation and finishes with SUCCESS.
      Notes:
-       - service_name must be 'postgresql-10'
        - service uses port 5432
   outputs:
     - installer_return_result: "The PostgreSQL server was successfully installed"
@@ -48,7 +46,7 @@ testInstallPostgres96OnWindowsSuccess:
     - hostname: <hostname>
     - username: <username>
     - password: <password>
-    - service_name: 'postgresql-9.6'
+    - service_name: 'postgresql'
     - service_account: 'postgres'
     - service_password: 'Passw0rd123!'
     - installation_file: 'http://get.enterprisedb.com/postgresql/postgresql-9.6.11-1-windows-x64.exe'
@@ -57,7 +55,6 @@ testInstallPostgres96OnWindowsSuccess:
   description: >
       Tests that run install_postgres_on_windows.sl to install postgres, check status, remove installation and finishes with SUCCESS.
       Notes:
-       - service_name must be 'postgresql-9.6'
        - service uses port 5432
   outputs:
     - installer_return_result: "The PostgreSQL server was successfully installed"
@@ -74,14 +71,13 @@ testInstallPostgres95OnWindowsSuccess:
     - password: <password>
     - installation_file: 'http://get.enterprisedb.com/postgresql/postgresql-9.5.15-1-windows-x64.exe'
     - service_account: 'postgres'
-    - service_name: 'postgresql-9.5'
-    - service_password: 'postgres'
+    - service_name: 'postgresql'
+    - service_password: 'Passw0rd123!'
     - installation_location: 'C:\\Program Files\\PostgreSQL\\9.5'
     - data_dir: 'C:\\Program Files\\PostgreSQL\\9.5\\data'
   description: >
       Tests that run install_postgres_on_windows.sl to install postgres, check status, remove installation and finishes with SUCCESS.
       Notes:
-        - service_name must be 'postgresql-9.5'
         - service uses port 5432
   outputs:
     - installer_return_result: "The PostgreSQL server was successfully installed"

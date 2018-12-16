@@ -294,7 +294,7 @@ flow:
     - return_code
     - return_result
     - exception
-    - installed_postgres_version
+    - installed_postgres_version: ${get('installed_postgres_version', '').strip()}
     - exception_from_xml: ${get('exception_from_xml', '')}
     - installer_exception: ${get('installer_exception', '')}
     - installer_return_result: ${get('installer_return_result', '').strip()}
