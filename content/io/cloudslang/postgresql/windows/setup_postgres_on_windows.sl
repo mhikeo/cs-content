@@ -194,7 +194,7 @@ flow:
         default: 'no'
         required: false
     - private_key_file:
-        required: true
+        required: false
     - temp_local_folder:
         default: '/tmp'
         required: false

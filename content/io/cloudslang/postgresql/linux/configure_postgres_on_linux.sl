@@ -228,12 +228,13 @@ flow:
     - download_postgres_conf_to_temp_local_folder:
         do:
           rft.remote_secure_copy:
-            - source_path: ${ './temp/postgresql.conf' }
-            - source_host: ${ hostname }
+            - source_path: ${'./temp/postgresql.conf'}
+            - source_host: ${hostname}
             - source_port: '22'
-            - source_username: ${ username }
-            - source_private_key_file: ${ private_key_file }
-            - destination_path: ${ temp_local_folder + '/postgresql.conf' }
+            - source_username: ${username}
+            - source_password: ${password if private_key_file is None else None}
+            - source_private_key_file: ${private_key_file}
+            - destination_path: ${temp_local_folder + '/postgresql.conf'}
         navigate:
           - SUCCESS: download_hba_conf_to_temp_local_folder
           - FAILURE: FAILURE
@@ -245,7 +246,7 @@ flow:
             - source_host: ${hostname}
             - source_port: '22'
             - source_username: ${username}
-            - source_password: ${password}
+            - source_password: ${password if private_key_file is None else None}
             - source_private_key_file: ${private_key_file}
             - destination_path: ${temp_local_folder + '/pg_hba.conf'}
         navigate:
@@ -260,6 +261,7 @@ flow:
             - destination_path: ${'./temp/' + configuration_file}
             - destination_port: '22'
             - destination_username: ${username}
+            - destination_password: ${password if private_key_file is None else None}
             - destination_private_key_file: ${private_key_file}
         navigate:
           - SUCCESS: change_permission_and_move_file_to_postgress_installation_location
@@ -312,6 +314,7 @@ flow:
             - destination_path: ${'temp/postgresql.conf'}
             - destination_port: '22'
             - destination_username: ${username}
+            - destination_password: ${password if private_key_file is None else None}
             - destination_private_key_file: ${private_key_file}
         navigate:
           - SUCCESS: upload_updated_pg_hba_conf_to_data_dir
@@ -325,6 +328,7 @@ flow:
             - destination_path: ${'temp/pg_hba.conf'}
             - destination_port: '22'
             - destination_username: ${username}
+            - destination_password: ${password if private_key_file is None else None}
             - destination_private_key_file: ${private_key_file}
         navigate:
           - SUCCESS: change_permission_and_move_file_to_postgress_installation_location

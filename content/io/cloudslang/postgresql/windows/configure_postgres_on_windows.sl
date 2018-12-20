@@ -155,7 +155,7 @@ flow:
         default: 'no'
         required: false
     - private_key_file:
-        required: true
+        required: false
     - temp_local_folder:
         default: '/tmp'
         required: false
@@ -307,6 +307,7 @@ flow:
             - destination_path: ${'/Users/' + username + '/tmp/' + configuration_file}
             - destination_port: '22'
             - destination_username: ${username}
+            - destination_password: ${password if private_key_file is None else None}
             - destination_private_key_file: ${private_key_file}
         navigate:
           - SUCCESS: move_file_to_data_dir
@@ -363,12 +364,13 @@ flow:
     - download_postgres_conf_to_temp_local_folder:
         do:
           rft.remote_secure_copy:
-            - source_path: ${ '/Users/' + username + '/tmp/postgresql.conf' }
-            - source_host: ${ hostname }
+            - source_path: ${'/Users/' + username + '/tmp/postgresql.conf'}
+            - source_host: ${hostname}
             - source_port: '22'
-            - source_username: ${ username }
-            - source_private_key_file: ${ private_key_file }
-            - destination_path: ${ temp_local_folder + '/postgresql.conf' }
+            - source_username: ${username}
+            - source_password: ${password if private_key_file is None else None}
+            - source_private_key_file: ${private_key_file}
+            - destination_path: ${temp_local_folder + '/postgresql.conf'}
         navigate:
           - SUCCESS: download_hba_conf_to_temp_local_folder
           - FAILURE: FAILURE
@@ -380,7 +382,7 @@ flow:
             - source_host: ${hostname}
             - source_port: '22'
             - source_username: ${username}
-            - source_password: ${password}
+            - source_password: ${password if private_key_file is None else None}
             - source_private_key_file: ${private_key_file}
             - destination_path: ${temp_local_folder + '/pg_hba.conf'}
         navigate:
@@ -419,6 +421,7 @@ flow:
             - destination_path: ${'/Users/' + username + '/tmp/postgresql.conf'}
             - destination_port: '22'
             - destination_username: ${username}
+            - destination_password: ${password if private_key_file is None else None}
             - destination_private_key_file: ${private_key_file}
         navigate:
           - SUCCESS: update_pg_hba_conf
@@ -446,6 +449,7 @@ flow:
             - destination_path: ${'/Users/' + username + '/tmp/pg_hba.conf'}
             - destination_port: '22'
             - destination_username: ${username}
+            - destination_password: ${password if private_key_file is None else None}
             - destination_private_key_file: ${private_key_file}
         navigate:
           - SUCCESS: move_file_to_data_dir
