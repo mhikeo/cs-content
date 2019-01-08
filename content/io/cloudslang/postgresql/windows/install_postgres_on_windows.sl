@@ -176,7 +176,7 @@ flow:
             - proxy_password
             - operation_timeout: ${execution_timeout}
             - script: >
-                ${'(New-Object Net.WebClient).DownloadFile(\"https://github.com/mhikeo/cs-content/tree/cs-postgresql-int/resources/Install-Postgres.zip\",\"C:\Windows\Temp\Install-Postgres.zip\");(new-object -com shell.application).namespace(\"C:\Program Files\WindowsPowerShell\Modules\").CopyHere((new-object -com shell.application).namespace(\"C:\Windows\Temp\Install-Postgres.zip\").Items(),16)'}
+                ${'(New-Object Net.WebClient).DownloadFile(\"https://github.com/mhikeo/cs-content/raw/cs-postgresql-int/resources/Install-Postgres.zip\",\"C:\Windows\Temp\Install-Postgres.zip\");(new-object -com shell.application).namespace(\"C:\Program Files\WindowsPowerShell\Modules\").CopyHere((new-object -com shell.application).namespace(\"C:\Windows\Temp\Install-Postgres.zip\").Items(),16)'}
         publish:
           -  return_code
           -  return_result
