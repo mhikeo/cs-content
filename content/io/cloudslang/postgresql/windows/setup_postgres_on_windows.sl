@@ -254,6 +254,7 @@ flow:
         navigate:
           - SUCCESS: configure_postgres
           - DOWNLOAD_INSTALLER_MODULE_FAILURE: FAILURE
+          - INSTALL_INSTALLER_MODULE_FAILURE: FAILURE
           - POSTGRES_INSTALL_PACKAGE_FAILURE: FAILURE
 
     - configure_postgres:
